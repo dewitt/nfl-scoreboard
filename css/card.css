@@ -154,14 +154,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-gold);
   font-size: 0.85rem;
-  animation: pulse-beacon 1.2s infinite ease-in-out;
+  line-height: 1;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4));
+  transition: transform var(--transition-fast);
+}
+
+/* Pulse on turnover/possession change or when inside the Red Zone */
+.possession-beacon.just-changed {
+  animation: pulse-beacon 0.8s 3 ease-in-out;
+}
+
+.game-card.is-redzone .possession-beacon {
+  animation: pulse-beacon 1.4s infinite ease-in-out;
 }
 
 @keyframes pulse-beacon {
-  0%, 100% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 4px var(--accent-gold)); }
-  50% { opacity: 0.5; transform: scale(0.9); filter: none; }
+  0%, 100% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 5px var(--accent-gold)); }
+  50% { opacity: 0.45; transform: scale(0.85); filter: none; }
 }
 
 /* Timeouts Remaining Dots */

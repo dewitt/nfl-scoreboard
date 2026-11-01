@@ -304,7 +304,7 @@ class NFLScoreboardApp {
   updateHeaderBadges(data) {
     const events = data.events || [];
     const liveCount = events.filter(e => e.state === 'in').length;
-    const redZoneCount = events.filter(e => e.situation?.isRedZone).length;
+    const redZoneCount = events.filter(e => e.situation?.isRedZone && !e.isHalftime).length;
     const upcomingCount = events.filter(e => e.state === 'pre').length;
     const finalCount = events.filter(e => e.state === 'post').length;
 
@@ -337,7 +337,7 @@ class NFLScoreboardApp {
       case 'live':
         return all.filter(g => g.state === 'in');
       case 'redzone':
-        return all.filter(g => g.situation?.isRedZone);
+        return all.filter(g => g.situation?.isRedZone && !g.isHalftime);
       case 'upcoming':
         return all.filter(g => g.state === 'pre');
       case 'final':

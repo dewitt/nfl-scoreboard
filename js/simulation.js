@@ -112,10 +112,11 @@ export class NFLSimulator {
         id: 'sim_3',
         name: 'Detroit Lions at Green Bay Packers',
         state: 'in',
+        isHalftime: true,
         period: 2,
-        displayClock: '0:35',
-        statusDetail: '0:35 - 2nd Quarter',
-        statusDescription: 'In Progress',
+        displayClock: '0:00',
+        statusDetail: 'Halftime',
+        statusDescription: 'Halftime',
         broadcast: 'NBC',
         odds: { details: 'DET -1.0', overUnder: 'O/U 51.5' },
         venue: 'Lambeau Field, Green Bay, WI',
@@ -141,20 +142,7 @@ export class NFLSimulator {
           record: '5-2',
           linescores: [{ value: 7 }, { value: 10 }]
         },
-        situation: {
-          possessionTeamId: '9',
-          down: 2,
-          distance: 2,
-          yardLine: 95,
-          isRedZone: true,
-          downDistanceText: '2nd & Goal at DET 5',
-          possessionText: 'DET 5',
-          homeTimeouts: 1,
-          awayTimeouts: 0,
-          lastPlayText: '(Shotgun) J.Love pass short right to J.Reed to DET 5 for 12 yards.',
-          driveSummary: '7 plays, 70 yards, 1:12',
-          winProbability: { homeWinPct: 48, awayWinPct: 52 }
-        }
+        situation: null
       },
       {
         id: 'sim_4',
@@ -266,6 +254,7 @@ export class NFLSimulator {
 
       // Switch possession
       sit.possessionId = sit.possessionId === game.homeTeam.id ? game.awayTeam.id : game.homeTeam.id;
+      sit.possessionChanged = true;
 
       scoreChanged = {
         team: scoringTeam,
@@ -273,6 +262,7 @@ export class NFLSimulator {
         type: 'TD'
       };
     } else {
+      sit.possessionChanged = false;
       // Normal gain
       const gain = Math.floor(Math.random() * 8) + 1;
       sit.yardLine = Math.min(98, sit.yardLine + gain);

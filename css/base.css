@@ -83,6 +83,13 @@ button:focus-visible {
   animation: pulse-redzone 1.5s infinite;
 }
 
+.badge-halftime {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  letter-spacing: 0.05em;
+}
+
 .badge-final {
   background: rgba(100, 116, 139, 0.2);
   color: var(--text-secondary);

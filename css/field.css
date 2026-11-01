@@ -63,7 +63,10 @@
   fill: #854d0e;
   stroke: #ffffff;
   stroke-width: 0.8;
-  filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.8));
+  filter: drop-shadow(0 0 3px rgba(250, 204, 21, 0.7));
+}
+
+.field-redzone-zone.active ~ * .field-ball-marker {
   animation: ball-pulse 1.4s infinite ease-in-out;
 }
 

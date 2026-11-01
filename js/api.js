@@ -5,6 +5,7 @@ export class NFLApiClient {
   constructor() {
     this.baseUrl = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl';
     this.previousScores = new Map(); // eventId -> { homeScore, awayScore }
+    this.previousPossession = new Map(); // eventId -> possessionTeamId
     this.cachedSummary = new Map();
   }
 
@@ -84,10 +85,15 @@ export class NFLApiClient {
     const status = evt.status || {};
     const statusType = status.type || {};
     const state = statusType.state || 'pre'; // 'pre', 'in', 'post'
+    const statusDesc = statusType.description || '';
+    const statusDetail = statusType.shortDetail || statusType.detail || '';
+    const isHalftime = statusDesc.toLowerCase().includes('halftime') ||
+                       statusDetail.toLowerCase().includes('halftime') ||
+                       statusType.name === 'STATUS_HALFTIME';
 
-    // Situation
+    // Situation (clear if Halftime or not in progress)
     const sit = comp.situation || {};
-    const situation = this.normalizeSituation(sit, homeTeam, awayTeam, state);
+    const situation = isHalftime ? null : this.normalizeSituation(sit, homeTeam, awayTeam, state, evt.id);
 
     // Broadcast
     const broadcasts = (comp.broadcasts || []).flatMap(b => b.names || []);
@@ -140,8 +146,9 @@ export class NFLApiClient {
       shortName: evt.shortName,
       date: evt.date,
       state, // 'pre', 'in', 'post'
-      statusDescription: statusType.description || '',
-      statusDetail: statusType.shortDetail || statusType.detail || '',
+      isHalftime,
+      statusDescription: statusDesc,
+      statusDetail: isHalftime ? 'HALFTIME' : statusDetail,
       period: status.period || 0,
       displayClock: status.displayClock || '',
       homeTeam,
@@ -190,7 +197,7 @@ export class NFLApiClient {
   /**
    * Normalize live situation
    */
-  normalizeSituation(sit, homeTeam, awayTeam, state) {
+  normalizeSituation(sit, homeTeam, awayTeam, state, eventId) {
     if (state !== 'in' || !sit) {
       return null;
     }
@@ -198,6 +205,16 @@ export class NFLApiClient {
     const possessionId = sit.possession;
     const possessingTeam = possessionId === homeTeam.id ? homeTeam : (possessionId === awayTeam.id ? awayTeam : null);
     const defendingTeam = possessingTeam === homeTeam ? awayTeam : homeTeam;
+
+    // Possession change detection
+    let possessionChanged = false;
+    if (eventId && possessionId) {
+      const prevPossession = this.previousPossession.get(eventId);
+      if (prevPossession && prevPossession !== possessionId) {
+        possessionChanged = true;
+      }
+      this.previousPossession.set(eventId, possessionId);
+    }
 
     const down = sit.down && sit.down > 0 ? sit.down : null;
     const distance = sit.distance !== undefined ? sit.distance : null;
@@ -240,6 +257,7 @@ export class NFLApiClient {
       possessionTeamId: possessionId,
       possessingTeam,
       defendingTeam,
+      possessionChanged,
       down,
       distance,
       yardLine, // 0 to 100

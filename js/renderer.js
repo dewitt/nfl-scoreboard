@@ -41,19 +41,23 @@ export class ScoreboardRenderer {
    * Render individual game card
    */
   renderGameCard(game) {
-    const isLive = game.state === 'in';
-    const isRedZone = game.situation?.isRedZone || false;
+    const isHalftime = game.isHalftime;
+    const isLive = game.state === 'in' && !isHalftime;
+    const isRedZone = isLive && (game.situation?.isRedZone || false);
     const isPost = game.state === 'post';
     const isPre = game.state === 'pre';
 
     // State class
     let cardClasses = `game-card state-${game.state}`;
+    if (isHalftime) cardClasses += ' is-halftime';
     if (isRedZone) cardClasses += ' is-redzone';
     if (game.scoreChanged) cardClasses += ' score-updated';
 
     // Status badge
     let statusBadge = '';
-    if (isLive) {
+    if (isHalftime) {
+      statusBadge = `<span class="badge badge-halftime">HALFTIME</span>`;
+    } else if (isLive) {
       statusBadge = `
         <span class="badge badge-live">
           <span class="live-dot"></span>
@@ -87,8 +91,8 @@ export class ScoreboardRenderer {
 
         <!-- Teams & Score Area -->
         <div class="card-teams">
-          ${this.renderTeamRow(game.awayTeam, game.situation?.possessionTeamId === game.awayTeam.id, game.situation?.awayTimeouts, isLive, isPost)}
-          ${this.renderTeamRow(game.homeTeam, game.situation?.possessionTeamId === game.homeTeam.id, game.situation?.homeTimeouts, isLive, isPost)}
+          ${this.renderTeamRow(game.awayTeam, game.situation?.possessionTeamId === game.awayTeam.id, game.situation?.awayTimeouts, isLive, isPost, game.situation?.possessionChanged && game.situation?.possessionTeamId === game.awayTeam.id)}
+          ${this.renderTeamRow(game.homeTeam, game.situation?.possessionTeamId === game.homeTeam.id, game.situation?.homeTimeouts, isLive, isPost, game.situation?.possessionChanged && game.situation?.possessionTeamId === game.homeTeam.id)}
         </div>
 
         <!-- Live Situation & Mini Field Tracker -->
@@ -147,7 +151,7 @@ export class ScoreboardRenderer {
   /**
    * Render team row inside card
    */
-  renderTeamRow(team, hasPossession, timeouts, isLive, isPost) {
+  renderTeamRow(team, hasPossession, timeouts, isLive, isPost, possessionChanged = false) {
     const isWinner = isPost && team.winner;
 
     return `
@@ -159,7 +163,7 @@ export class ScoreboardRenderer {
               <span class="team-abbr" style="${hasPossession ? `color:${team.color}` : ''}">${team.abbr}</span>
               <span class="team-name">${team.shortDisplayName}</span>
               ${hasPossession && isLive ? `
-                <span class="possession-beacon" title="Has Ball">🏈</span>
+                <span class="possession-beacon ${possessionChanged ? 'just-changed' : ''}" title="Has Ball">🏈</span>
               ` : ''}
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
@@ -221,41 +225,48 @@ export class ScoreboardRenderer {
 
     container.innerHTML = `
       <div class="ticker-view">
-        ${games.map(game => `
-          <div class="ticker-row state-${game.state} ${game.situation?.isRedZone ? 'is-redzone' : ''}" data-game-id="${game.id}">
-            <div class="ticker-status">
-              <span class="badge ${game.state === 'in' ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre')}">
-                ${game.statusDetail || game.statusDescription}
-              </span>
-            </div>
+        ${games.map(game => {
+          const isHalftime = game.isHalftime;
+          const isLive = game.state === 'in' && !isHalftime;
+          const isRedZone = isLive && (game.situation?.isRedZone || false);
+          const badgeClass = isHalftime ? 'badge-halftime' : (isLive ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre'));
 
-            <div class="ticker-matchup">
-              <div class="ticker-team">
-                <img class="ticker-team-logo" src="${game.awayTeam.logo}" alt="" />
-                <span class="ticker-team-name">${game.awayTeam.abbr}</span>
-                <span class="ticker-score">${game.awayTeam.score}</span>
-                ${game.situation?.possessionTeamId === game.awayTeam.id ? '🏈' : ''}
+          return `
+            <div class="ticker-row state-${game.state} ${isHalftime ? 'is-halftime' : ''} ${isRedZone ? 'is-redzone' : ''}" data-game-id="${game.id}">
+              <div class="ticker-status">
+                <span class="badge ${badgeClass}">
+                  ${game.statusDetail || game.statusDescription}
+                </span>
               </div>
 
-              <span style="color:var(--text-muted);font-weight:700;">@</span>
+              <div class="ticker-matchup">
+                <div class="ticker-team">
+                  <img class="ticker-team-logo" src="${game.awayTeam.logo}" alt="" />
+                  <span class="ticker-team-name">${game.awayTeam.abbr}</span>
+                  <span class="ticker-score">${game.awayTeam.score}</span>
+                  ${game.situation?.possessionTeamId === game.awayTeam.id && isLive ? '🏈' : ''}
+                </div>
 
-              <div class="ticker-team">
-                <img class="ticker-team-logo" src="${game.homeTeam.logo}" alt="" />
-                <span class="ticker-team-name">${game.homeTeam.abbr}</span>
-                <span class="ticker-score">${game.homeTeam.score}</span>
-                ${game.situation?.possessionTeamId === game.homeTeam.id ? '🏈' : ''}
+                <span style="color:var(--text-muted);font-weight:700;">@</span>
+
+                <div class="ticker-team">
+                  <img class="ticker-team-logo" src="${game.homeTeam.logo}" alt="" />
+                  <span class="ticker-team-name">${game.homeTeam.abbr}</span>
+                  <span class="ticker-score">${game.homeTeam.score}</span>
+                  ${game.situation?.possessionTeamId === game.homeTeam.id && isLive ? '🏈' : ''}
+                </div>
+              </div>
+
+              <div class="ticker-situation">
+                ${game.situation ? `${game.situation.downDistanceText} - ${game.situation.lastPlayText || ''}` : (game.isHalftime ? 'Halftime Intermission' : (game.odds?.details || ''))}
+              </div>
+
+              <div class="ticker-field-wrapper">
+                ${game.situation ? MiniFieldRenderer.render(game.situation, game.homeTeam, game.awayTeam) : ''}
               </div>
             </div>
-
-            <div class="ticker-situation">
-              ${game.situation ? `${game.situation.downDistanceText} - ${game.situation.lastPlayText || ''}` : (game.odds?.details || '')}
-            </div>
-
-            <div class="ticker-field-wrapper">
-              ${game.situation ? MiniFieldRenderer.render(game.situation, game.homeTeam, game.awayTeam) : ''}
-            </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
 
@@ -277,14 +288,16 @@ export class ScoreboardRenderer {
     if (!selectedGame) return;
 
     const game = selectedGame;
-    const isLive = game.state === 'in';
+    const isHalftime = game.isHalftime;
+    const isLive = game.state === 'in' && !isHalftime;
+    const badgeClass = isHalftime ? 'badge-halftime' : (isLive ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre'));
 
     container.innerHTML = `
       <div class="theater-layout">
         <!-- Main Stage -->
         <div class="theater-main">
           <div class="stage-header">
-            <span class="badge ${isLive ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre')}">
+            <span class="badge ${badgeClass}">
               ${game.statusDetail || game.statusDescription}
             </span>
             <div style="display:flex;gap:12px;color:var(--text-secondary);font-size:0.8rem;font-family:var(--font-mono);">
