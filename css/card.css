@@ -1,0 +1,334 @@
+.game-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px -4px rgba(0, 0, 0, 0.6);
+}
+
+/* In-progress card glow & accent */
+.game-card.state-in {
+  border-left: 4px solid var(--accent-red);
+}
+
+.game-card.state-in.is-redzone {
+  border-left: 4px solid var(--accent-gold);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 60%);
+  box-shadow: var(--shadow-glow);
+}
+
+.game-card.state-post {
+  opacity: 0.92;
+  border-left: 4px solid var(--text-muted);
+}
+
+.game-card.state-pre {
+  border-left: 4px solid var(--accent-blue);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 6px;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+}
+
+.card-odds {
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.card-venue {
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Teams & Scores Area */
+.card-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.team-row.has-possession {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.team-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.team-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.team-name-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.team-abbr {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 0.02em;
+}
+
+.team-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-record {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Possession Arrow / Indicator */
+.possession-beacon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  animation: pulse-beacon 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-beacon {
+  0%, 100% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 4px var(--accent-gold)); }
+  50% { opacity: 0.5; transform: scale(0.9); filter: none; }
+}
+
+/* Timeouts Remaining Dots */
+.timeouts-container {
+  display: flex;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.timeout-bar {
+  width: 10px;
+  height: 3px;
+  background: var(--border-light);
+  border-radius: 1px;
+}
+
+.timeout-bar.active {
+  background: var(--accent-gold);
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+}
+
+/* Score numeral */
+.team-score-group {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.team-score {
+  font-size: 1.65rem;
+  font-weight: 900;
+  font-family: var(--font-score);
+  color: var(--text-bright);
+  min-width: 40px;
+  text-align: right;
+  line-height: 1;
+}
+
+.team-score.is-winner {
+  color: #38bdf8;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+/* Linescore Table */
+.linescore-table {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.linescore-table th,
+.linescore-table td {
+  padding: 1px 4px;
+}
+
+.linescore-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.linescore-table td {
+  color: var(--text-secondary);
+}
+
+/* Situation Bar */
+.situation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-tertiary);
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.78rem;
+}
+
+.situation-down-distance {
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.situation-down-distance.fourth-down {
+  color: var(--accent-red);
+  animation: pulse-redzone 1s infinite;
+}
+
+.situation-yardline {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Last Play Text */
+.card-last-play {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--border-light);
+}
+
+.drive-summary {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-top: 3px;
+}
+
+/* Win Probability Bar */
+.wp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wp-bar {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  display: flex;
+  overflow: hidden;
+}
+
+.wp-fill-away {
+  height: 100%;
+  transition: width var(--transition-normal);
+}
+
+.wp-fill-home {
+  height: 100%;
+  transition: width var(--transition-normal);
+}
+
+.wp-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Card Footer Actions */
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+.card-action-btn {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  gap: 4px;
+}
+
+.card-action-btn:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}

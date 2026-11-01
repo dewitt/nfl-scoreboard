@@ -1,0 +1,108 @@
+.mini-field-container {
+  width: 100%;
+  background: var(--field-turf);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.mini-field-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Yard markings */
+.field-yardline {
+  stroke: var(--field-lines);
+  stroke-width: 0.5;
+  stroke-dasharray: 2, 2;
+}
+
+.field-goal-line {
+  stroke: #ffffff;
+  stroke-width: 1;
+}
+
+.field-50-line {
+  stroke: #ffffff;
+  stroke-width: 1.2;
+}
+
+.field-redzone-zone {
+  fill: var(--redzone-fill);
+}
+
+.field-redzone-zone.active {
+  animation: pulse-redzone-turf 2s infinite ease-in-out;
+}
+
+@keyframes pulse-redzone-turf {
+  0%, 100% { fill: rgba(239, 68, 68, 0.2); }
+  50% { fill: rgba(239, 68, 68, 0.4); }
+}
+
+.field-scrimmage-line {
+  stroke: var(--scrimmage-line);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 4px var(--scrimmage-line));
+}
+
+.field-firstdown-line {
+  stroke: var(--first-down-line);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 4px var(--first-down-line));
+}
+
+.field-ball-marker {
+  fill: #854d0e;
+  stroke: #ffffff;
+  stroke-width: 0.8;
+  filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.8));
+  animation: ball-pulse 1.4s infinite ease-in-out;
+}
+
+@keyframes ball-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.endzone-label {
+  font-family: var(--font-sans);
+  font-size: 5.5px;
+  font-weight: 900;
+  fill: #ffffff;
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0.5px;
+}
+
+.field-number {
+  font-family: var(--font-mono);
+  font-size: 3.5px;
+  font-weight: 700;
+  fill: rgba(255, 255, 255, 0.6);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.drive-direction-indicator {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}

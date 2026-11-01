@@ -1,0 +1,20 @@
+{
+  "name": "nfl-scoreboard",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "High-density full-screen NFL scoreboard dashboard for secondary monitors",
+  "main": "index.html",
+  "scripts": {
+    "start": "./serve.sh",
+    "dev": "python3 -m http.server 8080"
+  },
+  "keywords": [
+    "nfl",
+    "scoreboard",
+    "dashboard",
+    "sports",
+    "live-tracker"
+  ],
+  "author": "DeWitt Clinton",
+  "license": "MIT"
+}

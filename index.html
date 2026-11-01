@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NFL Command Board — Live Scores & Game Tracker</title>
+  <link rel="icon" href="https://a.espncdn.com/redesign/assets/img/icons/ESPN-icon-football.png" type="image/png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/grid.css">
+  <link rel="stylesheet" href="css/card.css">
+  <link rel="stylesheet" href="css/field.css">
+  <link rel="stylesheet" href="css/theater.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/ticker.css">
+</head>
+<body>
+
+  <!-- Top Command Center Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand">
+        <!-- NFL Shield SVG -->
+        <svg class="nfl-shield-icon" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 0L96 18V62C96 90 76 112 50 120C24 112 4 90 4 62V18L50 0Z" fill="#013369"/>
+          <path d="M50 6L90 22V60C90 84 73 103 50 112C27 103 10 84 10 60V22L50 6Z" fill="#D50A0A"/>
+          <path d="M50 10L86 24V58C86 80 70 98 50 106C30 98 14 80 14 58V24L50 10Z" fill="#013369"/>
+          <path d="M50 18L55 32H70L58 41L63 55L50 46L37 55L42 41L30 32H45L50 18Z" fill="#FFFFFF"/>
+          <!-- Football Laces in Shield -->
+          <ellipse cx="50" cy="80" rx="18" ry="10" fill="#FFFFFF"/>
+          <ellipse cx="50" cy="80" rx="14" ry="7" fill="#013369"/>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-title">NFL COMMAND CENTER</span>
+          <span class="brand-subtitle">
+            <span class="live-dot"></span>
+            LIVE FEED ACTIVE
+          </span>
+        </div>
+      </div>
+
+      <!-- Week Selector -->
+      <div class="week-select-container">
+        <label for="week-select" style="font-size:0.7rem;color:var(--text-muted);font-weight:700;">WEEK:</label>
+        <select id="week-select" class="week-select">
+          <option value="current">Current Week</option>
+        </select>
+      </div>
+
+      <!-- Teams on Bye Strip -->
+      <div class="bye-teams" id="bye-teams-container"></div>
+    </div>
+
+    <!-- Center Segmented Filters -->
+    <div class="header-center">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">
+          <span>All Games</span>
+          <span class="filter-count" id="count-all">0</span>
+        </button>
+        <button class="filter-btn" data-filter="live">
+          <span class="live-dot"></span>
+          <span>Live</span>
+          <span class="filter-count" id="count-live">0</span>
+        </button>
+        <button class="filter-btn" data-filter="redzone">
+          <span>Red Zone</span>
+          <span class="filter-count" id="count-redzone">0</span>
+        </button>
+        <button class="filter-btn" data-filter="upcoming">
+          <span>Upcoming</span>
+          <span class="filter-count" id="count-upcoming">0</span>
+        </button>
+        <button class="filter-btn" data-filter="final">
+          <span>Final</span>
+          <span class="filter-count" id="count-final">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="header-right">
+      <!-- Auto Poll Countdown Ring -->
+      <div class="poll-status-indicator" title="Auto-refresh countdown">
+        <svg class="countdown-ring" viewBox="0 0 24 24">
+          <circle class="countdown-circle-bg" cx="12" cy="12" r="9" />
+          <circle id="countdown-circle" class="countdown-circle" cx="12" cy="12" r="9" />
+        </svg>
+        <span id="poll-seconds">15s</span>
+      </div>
+
+      <!-- Instant Refresh Button -->
+      <button class="ctrl-btn ctrl-icon-btn" id="btn-refresh" title="Refresh Now (R)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+        </svg>
+      </button>
+
+      <!-- View Switcher -->
+      <div class="filter-group">
+        <button class="ctrl-btn view-btn active" data-view="grid" title="Grid View (1)">Grid</button>
+        <button class="ctrl-btn view-btn" data-view="theater" title="Focus Theater View (2)">Theater</button>
+        <button class="ctrl-btn view-btn" data-view="ticker" title="Compact Ticker (3)">Ticker</button>
+      </div>
+
+      <!-- Monitor Scaling (- / +) -->
+      <div class="scale-controls" title="Scale UI to fit your monitor">
+        <button class="scale-btn" id="scale-down">−</button>
+        <span class="scale-display" id="scale-display">100%</span>
+        <button class="scale-btn" id="scale-up">+</button>
+      </div>
+
+      <!-- Audio Alert Toggle -->
+      <button class="ctrl-btn" id="btn-sound" title="Toggle Touchdown/Score Audio Chimes (M)">
+        <span>🔇</span>
+        <span>Muted</span>
+      </button>
+
+      <!-- Demo / Simulation Mode -->
+      <button class="ctrl-btn" id="btn-demo" title="Toggle Live Simulation Demo">
+        <span>⚡</span>
+        <span>Demo Off</span>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button class="ctrl-btn ctrl-icon-btn" id="btn-fullscreen" title="Toggle Fullscreen (F)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Scoreboard Container -->
+  <main class="app-main scoreboard-container" id="main-container">
+    <div class="empty-state">
+      <div class="loading-spinner"></div>
+      <div class="empty-text">Loading NFL scores & live drive data...</div>
+    </div>
+  </main>
+
+  <!-- Detailed Game Modal -->
+  <div class="modal-backdrop" id="game-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-game-title">Game Details</h2>
+        <button class="modal-close-btn" id="modal-close-btn" title="Close (Esc)">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Rendered dynamically by modal.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Entrypoint -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

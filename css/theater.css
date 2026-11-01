@@ -1,0 +1,169 @@
+.theater-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  gap: 16px;
+  padding: 12px;
+}
+
+.theater-main {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.theater-sidebar {
+  width: 380px;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.theater-sidebar-header {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Big Stage Scoreboard */
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+
+.stage-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 16px 0;
+  gap: 24px;
+}
+
+.stage-team {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.stage-team.home {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.stage-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+}
+
+.stage-team-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.stage-team-name {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-bright);
+}
+
+.stage-team-record {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.stage-vs-score {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stage-score {
+  font-size: 3.2rem;
+  font-weight: 900;
+  font-family: var(--font-score);
+  color: var(--text-bright);
+  min-width: 70px;
+  text-align: center;
+}
+
+.stage-score-divider {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+}
+
+.stage-field-box {
+  background: var(--bg-card);
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stage-field-box .mini-field-container {
+  height: 80px;
+}
+
+.stage-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Stage Panels */
+.stage-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.stage-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stage-panel-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 6px;
+}
+
+@media (max-width: 1024px) {
+  .theater-layout { flex-direction: column; }
+  .theater-sidebar { width: 100%; height: 260px; }
+  .stage-panels { grid-template-columns: 1fr; }
+}
