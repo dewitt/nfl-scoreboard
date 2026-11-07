@@ -9,15 +9,61 @@
   height: 48px;
   display: flex;
   align-items: center;
+  user-select: none;
 }
 
 .mini-field-svg {
   width: 100%;
   height: 100%;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* Yard markings */
+/* Endzones with authentic team logos and goal line separation */
+.field-endzone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8.333%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  overflow: hidden;
+  padding: 2px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.45);
+}
+
+.endzone-left {
+  left: 0;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.85);
+}
+
+.endzone-right {
+  right: 0;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.85);
+}
+
+.endzone-logo {
+  max-width: 90%;
+  max-height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+  pointer-events: none;
+}
+
+.endzone-abbr {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.5px;
+}
+
+/* Yard Markings in SVG */
 .field-yardline {
   stroke: var(--field-lines);
   stroke-width: 0.5;
@@ -26,12 +72,12 @@
 
 .field-goal-line {
   stroke: #ffffff;
-  stroke-width: 1;
+  stroke-width: 1.2;
 }
 
 .field-50-line {
   stroke: #ffffff;
-  stroke-width: 1.2;
+  stroke-width: 1.5;
 }
 
 .field-redzone-zone {
@@ -44,7 +90,7 @@
 
 @keyframes pulse-redzone-turf {
   0%, 100% { fill: rgba(239, 68, 68, 0.2); }
-  50% { fill: rgba(239, 68, 68, 0.4); }
+  50% { fill: rgba(239, 68, 68, 0.45); }
 }
 
 .field-scrimmage-line {
@@ -59,53 +105,83 @@
   filter: drop-shadow(0 0 4px var(--first-down-line));
 }
 
-.field-ball-marker {
-  fill: #854d0e;
-  stroke: #ffffff;
-  stroke-width: 0.8;
-  filter: drop-shadow(0 0 3px rgba(250, 204, 21, 0.7));
+/* Monospace Yard Numbers (HTML overlay, perfectly unskewed) */
+.field-yard-numbers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.field-redzone-zone.active ~ * .field-ball-marker {
+.field-yard-num {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.5px;
+}
+
+/* Authentic Pro Football Marker (Fixed Aspect Ratio) */
+.field-ball-wrapper {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pro-football-svg {
+  display: block;
+  overflow: visible;
+}
+
+.ball-drive-arrow {
+  position: absolute;
+  top: -8px;
+  font-size: 0.55rem;
+  color: #facc15;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+  animation: bounce-arrow 1.2s infinite ease-in-out;
+}
+
+@keyframes bounce-arrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.field-ball-wrapper.redzone-pulse .pro-football-svg {
   animation: ball-pulse 1.4s infinite ease-in-out;
 }
 
 @keyframes ball-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-}
-
-.endzone-label {
-  font-family: var(--font-sans);
-  font-size: 5.5px;
-  font-weight: 900;
-  fill: #ffffff;
-  text-anchor: middle;
-  dominant-baseline: central;
-  letter-spacing: 0.5px;
-}
-
-.field-number {
-  font-family: var(--font-mono);
-  font-size: 3.5px;
-  font-weight: 700;
-  fill: rgba(255, 255, 255, 0.6);
-  text-anchor: middle;
-  dominant-baseline: central;
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.6)); }
+  50% { transform: scale(1.2); filter: drop-shadow(0 0 8px rgba(239, 68, 68, 1)); }
 }
 
 .drive-direction-indicator {
   position: absolute;
   top: 2px;
-  right: 6px;
+  right: calc(8.333% + 6px);
   font-size: 0.6rem;
   font-weight: 800;
   color: var(--accent-gold);
-  background: rgba(0, 0, 0, 0.6);
-  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1px 5px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   gap: 3px;
   pointer-events: none;
+  z-index: 3;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

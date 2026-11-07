@@ -1,5 +1,6 @@
 import { WinProbabilityChart } from './chart.js';
 import { MiniFieldRenderer } from './field.js';
+import { getGameWatchLinks } from './links.js';
 
 /**
  * Game Details & Box Score Modal Controller
@@ -74,8 +75,23 @@ export class GameDetailsModal {
 
     const game = this.currentGame;
     const summary = this.summaryData;
+    const watchLinks = getGameWatchLinks(game);
 
     this.bodyEl.innerHTML = `
+      <!-- Streaming & Watch Links Bar -->
+      ${watchLinks.length > 0 ? `
+        <div class="modal-watch-bar">
+          <span class="modal-watch-label">Broadcast & Streaming:</span>
+          ${watchLinks.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="modal-watch-pill" title="Open ${l.label}">
+              <span>${l.icon}</span>
+              <span>${l.label}</span>
+              <span class="modal-ext-icon">↗</span>
+            </a>
+          `).join('')}
+        </div>
+      ` : ''}
+
       <!-- Modal Navigation Tabs -->
       <div class="modal-tabs">
         <button class="modal-tab-btn ${this.activeTab === 'stats' ? 'active' : ''}" data-tab="stats">Team Stats</button>

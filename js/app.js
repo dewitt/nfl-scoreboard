@@ -57,8 +57,14 @@ class NFLScoreboardApp {
     this.setupEventListeners();
     this.setupKeyboardShortcuts();
 
-    // Initial fetch
-    await this.refresh();
+    // Check URL parameters for demo mode
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('demo')) {
+      this.toggleDemoMode();
+    } else {
+      // Initial fetch
+      await this.refresh();
+    }
 
     // Start auto-polling
     this.startPolling();
@@ -316,11 +322,17 @@ class NFLScoreboardApp {
     this.setFilterCount('final', finalCount);
 
     // Update Bye Teams
-    if (this.byeTeamsEl && data.teamsOnBye?.length > 0) {
-      this.byeTeamsEl.innerHTML = `
-        <span>BYE:</span>
-        ${data.teamsOnBye.map(t => `<span class="bye-chip" title="${t.displayName}">${t.abbr}</span>`).join('')}
-      `;
+    if (this.byeTeamsEl) {
+      if (data.teamsOnBye?.length > 0) {
+        this.byeTeamsEl.style.display = 'flex';
+        this.byeTeamsEl.innerHTML = `
+          <span>BYE:</span>
+          ${data.teamsOnBye.map(t => `<span class="bye-chip" title="${t.displayName}">${t.abbr}</span>`).join('')}
+        `;
+      } else {
+        this.byeTeamsEl.style.display = 'none';
+        this.byeTeamsEl.innerHTML = '';
+      }
     }
   }
 

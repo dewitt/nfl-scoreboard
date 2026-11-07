@@ -331,6 +331,33 @@
   margin-top: 2px;
 }
 
+.card-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-watch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.card-watch-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-bright);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .card-action-btn {
   font-size: 0.7rem;
   font-weight: 700;

@@ -1,4 +1,5 @@
 import { MiniFieldRenderer } from './field.js';
+import { getGameWatchLinks } from './links.js';
 
 /**
  * Scoreboard DOM Renderer
@@ -139,10 +140,22 @@ export class ScoreboardRenderer {
         <!-- Card Footer -->
         <div class="card-footer">
           <span style="font-size:0.68rem;color:var(--text-muted);">${game.shortName || game.name}</span>
-          <button class="card-action-btn">
-            <span>Box Score & Stats</span>
-            <span>→</span>
-          </button>
+          <div class="card-footer-right">
+            ${(() => {
+              const watchLinks = getGameWatchLinks(game);
+              const primary = watchLinks[0];
+              return primary ? `
+                <a href="${primary.url}" target="_blank" rel="noopener noreferrer" class="card-watch-link" onclick="event.stopPropagation();" title="${primary.label}">
+                  <span>${primary.icon}</span>
+                  <span>${primary.label}</span>
+                </a>
+              ` : '';
+            })()}
+            <button class="card-action-btn">
+              <span>Box Score & Stats</span>
+              <span>→</span>
+            </button>
+          </div>
         </div>
       </div>
     `;

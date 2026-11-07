@@ -46,6 +46,51 @@
   justify-content: space-between;
 }
 
+.modal-watch-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-watch-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal-watch-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.modal-watch-pill:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-bright);
+  border-color: var(--accent-blue);
+  transform: translateY(-1px);
+}
+
+.modal-ext-icon {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
 .modal-title {
   font-size: 1.1rem;
   font-weight: 800;

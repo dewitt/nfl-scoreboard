@@ -91,6 +91,10 @@ header.app-header {
   padding-left: 10px;
 }
 
+.bye-teams:empty {
+  display: none !important;
+}
+
 .bye-chip {
   background: var(--bg-card);
   padding: 1px 6px;
