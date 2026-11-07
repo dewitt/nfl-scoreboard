@@ -14,6 +14,9 @@ export class NFLSimulator {
     return [
       {
         id: 'sim_1',
+        seasonYear: 2026,
+        seasonType: 2,
+        weekNumber: 8,
         name: 'Kansas City Chiefs at Buffalo Bills',
         state: 'in',
         period: 4,
@@ -62,6 +65,9 @@ export class NFLSimulator {
       },
       {
         id: 'sim_2',
+        seasonYear: 2026,
+        seasonType: 2,
+        weekNumber: 8,
         name: 'Baltimore Ravens at Pittsburgh Steelers',
         state: 'in',
         period: 3,
@@ -110,6 +116,9 @@ export class NFLSimulator {
       },
       {
         id: 'sim_3',
+        seasonYear: 2026,
+        seasonType: 2,
+        weekNumber: 8,
         name: 'Detroit Lions at Green Bay Packers',
         state: 'in',
         isHalftime: true,
@@ -146,6 +155,9 @@ export class NFLSimulator {
       },
       {
         id: 'sim_4',
+        seasonYear: 2026,
+        seasonType: 2,
+        weekNumber: 8,
         name: 'San Francisco 49ers at Dallas Cowboys',
         state: 'post',
         statusDetail: 'Final',
@@ -180,6 +192,9 @@ export class NFLSimulator {
       },
       {
         id: 'sim_5',
+        seasonYear: 2026,
+        seasonType: 2,
+        weekNumber: 8,
         name: 'Philadelphia Eagles at Washington Commanders',
         state: 'pre',
         statusDetail: '8:20 PM EST',

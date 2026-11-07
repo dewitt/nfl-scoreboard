@@ -54,12 +54,15 @@ export class NFLApiClient {
   normalizeScoreboard(data) {
     const season = data.season || {};
     const week = data.week || {};
-    const events = (data.events || []).map(evt => this.normalizeEvent(evt));
+    const seasonYear = season.year || new Date().getFullYear();
+    const seasonType = season.type || 2;
+    const weekNumber = week.number || 1;
+    const events = (data.events || []).map(evt => this.normalizeEvent(evt, { seasonYear, seasonType, weekNumber }));
 
     return {
-      seasonYear: season.year || new Date().getFullYear(),
-      seasonType: season.type || 2,
-      weekNumber: week.number || 1,
+      seasonYear,
+      seasonType,
+      weekNumber,
       teamsOnBye: (week.teamsOnBye || []).map(t => ({
         id: t.id,
         name: t.displayName,
@@ -73,7 +76,7 @@ export class NFLApiClient {
   /**
    * Normalize an individual event
    */
-  normalizeEvent(evt) {
+  normalizeEvent(evt, context = {}) {
     const comp = evt.competitions?.[0] || {};
     const competitors = comp.competitors || [];
     const homeComp = competitors.find(c => c.homeAway === 'home') || {};
@@ -139,12 +142,25 @@ export class NFLApiClient {
       awayScore: awayTeam.score
     });
 
+    // Extract ESPN web links
+    const espnLinks = (evt.links || []).reduce((acc, l) => {
+      const rels = l.rel || [];
+      if (rels.includes('summary') || rels.includes('gamecast')) acc.gamecast = l.href;
+      if (rels.includes('recap')) acc.recap = l.href;
+      if (rels.includes('highlights')) acc.highlights = l.href;
+      if (rels.includes('boxscore')) acc.boxscore = l.href;
+      return acc;
+    }, {});
+
     return {
       id: evt.id,
       uid: evt.uid,
       name: evt.name,
       shortName: evt.shortName,
       date: evt.date,
+      seasonYear: context.seasonYear || evt.season?.year || new Date(evt.date || Date.now()).getFullYear(),
+      seasonType: context.seasonType || evt.season?.type || 2,
+      weekNumber: context.weekNumber || evt.week?.number || 1,
       state, // 'pre', 'in', 'post'
       isHalftime,
       statusDescription: statusDesc,
@@ -157,7 +173,8 @@ export class NFLApiClient {
       broadcast: broadcastStr,
       odds,
       venue: venueStr,
-      scoreChanged
+      scoreChanged,
+      espnLinks
     };
   }
 
