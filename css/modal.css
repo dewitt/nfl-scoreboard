@@ -85,6 +85,30 @@
   border-color: var(--accent-blue);
 }
 
+.modal-watch-pill.badge-watch-pro {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+}
+
+.modal-watch-pill.badge-watch-pro:hover {
+  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.16);
+  color: #fef08a;
+}
+
+.modal-watch-pill.badge-watch-team-film {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.08);
+  color: #93c5fd;
+}
+
+.modal-watch-pill.badge-watch-team-film:hover {
+  border-color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.18);
+  color: #dbeafe;
+}
+
 .modal-ext-icon {
   font-size: 0.7rem;
   color: var(--text-muted);

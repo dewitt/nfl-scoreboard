@@ -55,20 +55,53 @@ export function getGameWatchLinks(game) {
       badgeClass: 'badge-watch-nfl'
     });
   } else if (isPost) {
-    // 1. Official NFL.com Game Center / Highlights
+    // 1. NFL Pro All-22 Film Room (weekly film cards)
+    const proFilmUrl = `https://pro.nfl.com/film/plays?weekSlug=${seasonYear}-${seasonTypeStr.toUpperCase()}-${weekNum}&displayGameFilmCards=true`;
+    links.push({
+      label: 'NFL Pro (All-22)',
+      shortLabel: '🎬 All-22',
+      url: proFilmUrl,
+      icon: '🎬',
+      badgeClass: 'badge-watch-pro'
+    });
+    // 2. Official NFL.com Game Center / Highlights
     links.push({
       label: 'NFL.com Game Center',
+      shortLabel: '🏈 NFL.com',
       url: nflGameUrl,
       icon: '🏈',
       badgeClass: 'badge-watch-nfl'
     });
-    // 2. YouTube TV Library Replay
+    // 3. YouTube TV Library Replay
     links.push({
       label: 'YouTube TV Replay',
+      shortLabel: '📺 YouTube TV',
       url: `https://tv.youtube.com/search/${query}`,
       icon: '📺',
       badgeClass: 'badge-watch-yt'
     });
+
+    // Team specific film rooms
+    if (game.awayTeam?.abbr) {
+      links.push({
+        label: `${game.awayTeam.abbr} Film Room`,
+        shortLabel: `${game.awayTeam.abbr} Film`,
+        url: `https://pro.nfl.com/teams/team/${game.awayTeam.abbr}/film-room`,
+        icon: '🎞️',
+        badgeClass: 'badge-watch-team-film',
+        modalOnly: true
+      });
+    }
+    if (game.homeTeam?.abbr) {
+      links.push({
+        label: `${game.homeTeam.abbr} Film Room`,
+        shortLabel: `${game.homeTeam.abbr} Film`,
+        url: `https://pro.nfl.com/teams/team/${game.homeTeam.abbr}/film-room`,
+        icon: '🎞️',
+        badgeClass: 'badge-watch-team-film',
+        modalOnly: true
+      });
+    }
   } else {
     // Upcoming
     if (broadcast.includes('prime') || broadcast.includes('amazon')) {

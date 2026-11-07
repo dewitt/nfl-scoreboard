@@ -357,6 +357,18 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+.card-watch-link.badge-watch-pro {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.08);
+  color: #fbbf24;
+}
+
+.card-watch-link.badge-watch-pro:hover {
+  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.18);
+  color: #fef08a;
+}
+
 .card-action-btn {
   font-size: 0.7rem;
   font-weight: 700;

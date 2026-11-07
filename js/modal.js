@@ -83,7 +83,7 @@ export class GameDetailsModal {
         <div class="modal-watch-bar">
           <span class="modal-watch-label">Broadcast & Streaming:</span>
           ${watchLinks.map(l => `
-            <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="modal-watch-pill" title="Open ${l.label}">
+            <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="modal-watch-pill ${l.badgeClass || ''}" title="Open ${l.label}">
               <span>${l.icon}</span>
               <span>${l.label}</span>
               <span class="modal-ext-icon">↗</span>

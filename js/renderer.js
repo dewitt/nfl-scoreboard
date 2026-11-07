@@ -142,10 +142,10 @@ export class ScoreboardRenderer {
           <span style="font-size:0.68rem;color:var(--text-muted);">${game.shortName || game.name}</span>
           <div class="card-footer-right">
             ${(() => {
-              const watchLinks = getGameWatchLinks(game);
+              const watchLinks = getGameWatchLinks(game).filter(l => !l.modalOnly);
               const primary = watchLinks[0];
               return primary ? `
-                <a href="${primary.url}" target="_blank" rel="noopener noreferrer" class="card-watch-link" onclick="event.stopPropagation();" title="${primary.label}">
+                <a href="${primary.url}" target="_blank" rel="noopener noreferrer" class="card-watch-link ${primary.badgeClass || ''}" onclick="event.stopPropagation();" title="${primary.label}">
                   <span>${primary.icon}</span>
                   <span>${primary.label}</span>
                 </a>
