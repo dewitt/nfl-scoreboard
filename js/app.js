@@ -321,6 +321,12 @@ class NFLScoreboardApp {
     this.setFilterCount('upcoming', upcomingCount);
     this.setFilterCount('final', finalCount);
 
+    // Only show pulsing live dot when live games actually exist
+    const liveFilterBtn = document.querySelector('.filter-btn[data-filter="live"]');
+    if (liveFilterBtn) {
+      liveFilterBtn.classList.toggle('has-live', liveCount > 0);
+    }
+
     // Update Bye Teams
     if (this.byeTeamsEl) {
       if (data.teamsOnBye?.length > 0) {

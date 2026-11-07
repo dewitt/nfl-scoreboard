@@ -131,6 +131,14 @@ header.app-header {
   gap: 6px;
 }
 
+.filter-btn .live-dot {
+  display: none;
+}
+
+.filter-btn.has-live .live-dot {
+  display: inline-block;
+}
+
 .filter-btn:hover {
   color: var(--text-primary);
   background: var(--bg-subtle);
