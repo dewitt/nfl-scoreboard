@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: 10px;
   box-shadow: var(--shadow-card);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -16,8 +16,7 @@
 .game-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-light);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 26px -4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5);
 }
 
 /* In-progress card glow & accent */

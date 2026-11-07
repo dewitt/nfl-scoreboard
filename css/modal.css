@@ -83,7 +83,6 @@
   background: var(--bg-tertiary);
   color: var(--text-bright);
   border-color: var(--accent-blue);
-  transform: translateY(-1px);
 }
 
 .modal-ext-icon {
