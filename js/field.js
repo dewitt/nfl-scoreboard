@@ -47,29 +47,25 @@ export class MiniFieldRenderer {
 
     const ballPercent = ((scrimmageX / 120) * 100).toFixed(2);
 
+    MiniFieldRenderer.counter = (MiniFieldRenderer.counter || 0) + 1;
+    const uid = MiniFieldRenderer.counter;
+    const turfGradId = `turf-grad-${uid}`;
+    const ballLeatherId = `ball-leather-${uid}`;
+
     return `
       <div class="mini-field-container" title="Ball at ${situation.possessionText || clampedYard + ' yd line'}">
         <!-- Background Turf & Vector Yard Lines -->
         <svg class="mini-field-svg" viewBox="0 0 120 28" preserveAspectRatio="none">
           <defs>
-            <linearGradient id="turf-grad" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="${turfGradId}" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#144627" />
               <stop offset="50%" stop-color="#1e5c35" />
               <stop offset="100%" stop-color="#144627" />
             </linearGradient>
-
-            <filter id="glow-scrimmage" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="0.6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-            <filter id="glow-firstdown" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="0.6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
           </defs>
 
           <!-- Main Field Turf -->
-          <rect x="10" y="0" width="100" height="28" fill="url(#turf-grad)" />
+          <rect x="10" y="0" width="100" height="28" fill="url(#${turfGradId})" />
 
           <!-- Red Zone Shading (Yards 80 to 100) -->
           <rect x="90" y="0" width="20" height="28" class="field-redzone-zone ${redZoneActive ? 'active' : ''}" />
@@ -87,10 +83,10 @@ export class MiniFieldRenderer {
           <line x1="110" y1="0" x2="110" y2="28" class="field-goal-line" />
 
           <!-- First Down Line (Yellow) -->
-          <line x1="${firstDownX}" y1="0" x2="${firstDownX}" y2="28" class="field-firstdown-line" filter="url(#glow-firstdown)" />
+          <line x1="${firstDownX}" y1="0" x2="${firstDownX}" y2="28" class="field-firstdown-line" />
 
           <!-- Line of Scrimmage (Electric Blue) -->
-          <line x1="${scrimmageX}" y1="0" x2="${scrimmageX}" y2="28" class="field-scrimmage-line" filter="url(#glow-scrimmage)" />
+          <line x1="${scrimmageX}" y1="0" x2="${scrimmageX}" y2="28" class="field-scrimmage-line" />
         </svg>
 
         <!-- Left Endzone (Offense Logo & Color) -->
@@ -126,21 +122,18 @@ export class MiniFieldRenderer {
         <div class="field-ball-wrapper ${redZoneActive ? 'redzone-pulse' : ''}" style="left: ${ballPercent}%;">
           <svg class="pro-football-svg" viewBox="0 0 24 16" width="22" height="15">
             <defs>
-              <radialGradient id="ball-leather" cx="35%" cy="30%" r="70%">
+              <radialGradient id="${ballLeatherId}" cx="35%" cy="30%" r="70%">
                 <stop offset="0%" stop-color="#b45309" />
                 <stop offset="50%" stop-color="#78350f" />
                 <stop offset="100%" stop-color="#451a03" />
               </radialGradient>
-              <filter id="ball-shadow" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="1.2" stdDeviation="0.8" flood-color="#000000" flood-opacity="0.85" />
-              </filter>
             </defs>
             <!-- Pointed Pigskin Body -->
             <path d="M 2 8 C 5 2.2, 19 2.2, 22 8 C 19 13.8, 5 13.8, 2 8 Z"
-                  fill="url(#ball-leather)"
+                  fill="url(#${ballLeatherId})"
                   stroke="#291003"
                   stroke-width="0.8"
-                  filter="url(#ball-shadow)" />
+                  style="filter: drop-shadow(0 1.2px 0.8px rgba(0, 0, 0, 0.85));" />
             <!-- White End Stripes -->
             <path d="M 6.2 4.2 C 6.8 6, 6.8 10, 6.2 11.8" stroke="#ffffff" stroke-width="0.9" fill="none" opacity="0.85" />
             <path d="M 17.8 4.2 C 17.2 6, 17.2 10, 17.8 11.8" stroke="#ffffff" stroke-width="0.9" fill="none" opacity="0.85" />

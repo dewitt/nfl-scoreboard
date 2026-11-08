@@ -16,6 +16,7 @@ main.app-main {
   transition: transform var(--transition-normal);
   container-type: inline-size;
   container-name: scoreboard;
+  zoom: var(--scale-factor);
 }
 
 .scoreboard-grid {

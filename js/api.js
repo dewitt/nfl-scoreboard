@@ -1,3 +1,5 @@
+import { getSimulatedSummary } from './simulation.js';
+
 /**
  * ESPN NFL API Client & Data Normalizer
  */
@@ -36,8 +38,14 @@ export class NFLApiClient {
   /**
    * Fetch detailed game summary
    * @param {string} eventId
+   * @param {Array} simGames - Optional simulated games array for demo mode
    */
-  async fetchGameSummary(eventId) {
+  async fetchGameSummary(eventId, simGames = []) {
+    if (String(eventId).startsWith('sim_')) {
+      const simData = getSimulatedSummary(eventId, simGames);
+      if (simData) return simData;
+    }
+
     const url = `${this.baseUrl}/summary?event=${eventId}&_t=${Date.now()}`;
     const res = await fetch(url);
     if (!res.ok) {
@@ -66,6 +74,7 @@ export class NFLApiClient {
       teamsOnBye: (week.teamsOnBye || []).map(t => ({
         id: t.id,
         name: t.displayName,
+        displayName: t.displayName,
         abbr: t.abbreviation,
         logo: t.logo
       })),

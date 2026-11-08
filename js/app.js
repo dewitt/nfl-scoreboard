@@ -15,7 +15,8 @@ class NFLScoreboardApp {
     this.simulator = new NFLSimulator();
 
     this.renderer = new ScoreboardRenderer({
-      onGameSelect: (game) => this.handleGameSelect(game)
+      onGameSelect: (game) => this.handleGameSelect(game),
+      onOpenModal: (game) => this.modal.open(game, this.simulator?.simulatedGames)
     });
 
     // App State
@@ -57,13 +58,26 @@ class NFLScoreboardApp {
     this.setupEventListeners();
     this.setupKeyboardShortcuts();
 
-    // Check URL parameters for demo mode
+    // Check URL parameters for demo mode, initial view, or modal
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('demo')) {
       this.toggleDemoMode();
     } else {
       // Initial fetch
       await this.refresh();
+    }
+
+    if (urlParams.has('view')) {
+      this.setView(urlParams.get('view'));
+    }
+
+    if (urlParams.has('modal')) {
+      const gId = urlParams.get('modal');
+      const target = this.currentData?.events?.find(e => e.id === gId) || this.currentData?.events?.[0];
+      if (urlParams.has('tab')) {
+        this.modal.activeTab = urlParams.get('tab');
+      }
+      if (target) this.modal.open(target, this.simulator?.simulatedGames);
     }
 
     // Start auto-polling
@@ -147,8 +161,14 @@ class NFLScoreboardApp {
 
   setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
-      // Ignore if user is inside an input or select
+      // Ignore if user is holding meta/ctrl/alt modifier keys (e.g. Cmd+R, Ctrl+F)
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+      // Ignore if user is inside an input, select, or textarea
       if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
+      // If modal dialog is open, do not trigger background shortcuts
+      if (this.modal?.isOpen) return;
 
       switch (e.key.toLowerCase()) {
         case 'f':
@@ -291,6 +311,19 @@ class NFLScoreboardApp {
   handleScoreboardData(data) {
     this.currentData = data;
 
+    // Refresh active game reference if set
+    if (this.activeGame) {
+      this.activeGame = data.events.find(e => e.id === this.activeGame.id) || null;
+    }
+
+    // Refresh open modal if currently viewing a game
+    if (this.modal.isOpen && this.modal.currentGame) {
+      const updatedGame = data.events.find(e => e.id === this.modal.currentGame.id);
+      if (updatedGame) {
+        this.modal.updateGame(updatedGame, this.simulator?.simulatedGames);
+      }
+    }
+
     // Check for score alert triggers across games
     const scoreChanges = data.events.filter(e => e.scoreChanged);
     scoreChanges.forEach(e => {
@@ -333,7 +366,7 @@ class NFLScoreboardApp {
         this.byeTeamsEl.style.display = 'flex';
         this.byeTeamsEl.innerHTML = `
           <span>BYE:</span>
-          ${data.teamsOnBye.map(t => `<span class="bye-chip" title="${t.displayName}">${t.abbr}</span>`).join('')}
+          ${data.teamsOnBye.map(t => `<span class="bye-chip" title="${t.displayName || t.name || t.abbr}">${t.abbr}</span>`).join('')}
         `;
       } else {
         this.byeTeamsEl.style.display = 'none';
@@ -372,7 +405,12 @@ class NFLScoreboardApp {
 
     const doRender = () => {
       if (this.activeView === 'theater') {
-        this.renderer.renderTheater(this.mainContainer, this.activeGame, this.currentData.events);
+        const theaterGames = games.length > 0 ? games : (this.currentData.events || []);
+        const targetGame = (this.activeGame && theaterGames.some(g => g.id === this.activeGame.id))
+          ? this.activeGame
+          : theaterGames[0];
+        this.activeGame = targetGame;
+        this.renderer.renderTheater(this.mainContainer, targetGame, theaterGames);
       } else if (this.activeView === 'ticker') {
         this.renderer.renderTicker(this.mainContainer, games);
       } else {
@@ -395,7 +433,7 @@ class NFLScoreboardApp {
       this.render();
     } else {
       // Open detailed modal
-      this.modal.open(game);
+      this.modal.open(game, this.simulator?.simulatedGames);
     }
   }
 
@@ -432,17 +470,34 @@ class NFLScoreboardApp {
   }
 
   openShortcutsModal() {
-    alert(
-      "Keyboard Shortcuts:\n\n" +
-      "F - Toggle Fullscreen Mode\n" +
-      "R - Refresh Scores Instantly\n" +
-      "M - Mute / Unmute Audio Alerts\n" +
-      "Space - Pause / Resume Polling\n" +
-      "1 - Grid View (All Games)\n" +
-      "2 - Theater / Focus View\n" +
-      "3 - Compact Ticker View\n" +
-      "? - Show Shortcuts"
-    );
+    const dialog = document.getElementById('shortcuts-modal');
+    if (!dialog) return;
+
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) dialog.showModal();
+    } else {
+      dialog.classList.add('open');
+    }
+
+    const closeBtn = document.getElementById('shortcuts-close-btn');
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        if (dialog.open) dialog.close();
+        dialog.classList.remove('open');
+      };
+    }
+
+    dialog.onclick = (e) => {
+      const rect = dialog.getBoundingClientRect();
+      const isInside = (
+        rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+      );
+      if (!isInside) {
+        if (dialog.open) dialog.close();
+        dialog.classList.remove('open');
+      }
+    };
   }
 }
 

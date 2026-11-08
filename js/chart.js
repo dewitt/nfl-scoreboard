@@ -1,3 +1,5 @@
+import { getAccessibleTeamColor } from './colors.js';
+
 /**
  * SVG Win Probability Chart Generator
  */
@@ -26,8 +28,9 @@ export class WinProbabilityChart {
     const chartH = height - padding * 2;
     const midY = padding + chartH / 2;
 
-    const homeColor = homeTeam?.color || '#3b82f6';
-    const awayColor = awayTeam?.color || '#ef4444';
+    const homeColor = getAccessibleTeamColor(homeTeam?.color || '#3b82f6', 0.72);
+    const awayColor = getAccessibleTeamColor(awayTeam?.color || '#ef4444', 0.72);
+    const gradId = 'wp-grad-home-' + Math.random().toString(36).slice(2, 7);
 
     // Map points to SVG coordinates
     const coords = points.map((p, idx) => {
@@ -49,7 +52,7 @@ export class WinProbabilityChart {
     return `
       <svg class="chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
         <defs>
-          <linearGradient id="wp-grad-home" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="${homeColor}" stop-opacity="0.3" />
             <stop offset="100%" stop-color="${homeColor}" stop-opacity="0.0" />
           </linearGradient>

@@ -1,5 +1,6 @@
 import { MiniFieldRenderer } from './field.js';
 import { getGameWatchLinks } from './links.js';
+import { getAccessibleTeamColor } from './colors.js';
 
 /**
  * Scoreboard DOM Renderer
@@ -7,6 +8,7 @@ import { getGameWatchLinks } from './links.js';
 export class ScoreboardRenderer {
   constructor(options = {}) {
     this.onGameSelect = options.onGameSelect || (() => {});
+    this.onOpenModal = options.onOpenModal || (() => {});
   }
 
   /**
@@ -247,7 +249,7 @@ export class ScoreboardRenderer {
           const badgeClass = isHalftime ? 'badge-halftime' : (isLive ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre'));
 
           return `
-            <div class="ticker-row state-${game.state} ${isHalftime ? 'is-halftime' : ''} ${isRedZone ? 'is-redzone' : ''}" data-game-id="${game.id}">
+            <div class="ticker-row state-${game.state} ${isHalftime ? 'is-halftime' : ''} ${isRedZone ? 'is-redzone' : ''}" data-game-id="${game.id}" style="view-transition-name: game-${game.id};">
               <div class="ticker-status">
                 <span class="badge ${badgeClass}">
                   ${game.statusDetail || game.statusDescription}
@@ -307,15 +309,32 @@ export class ScoreboardRenderer {
     const isLive = game.state === 'in' && !isHalftime;
     const badgeClass = isHalftime ? 'badge-halftime' : (isLive ? 'badge-live' : (game.state === 'post' ? 'badge-final' : 'badge-pre'));
 
+    const watchLinks = getGameWatchLinks(game);
+    const awayScoreColor = getAccessibleTeamColor(game.awayTeam.color, 0.75);
+    const homeScoreColor = getAccessibleTeamColor(game.homeTeam.color, 0.75);
+
     container.innerHTML = `
       <div class="theater-layout">
         <!-- Main Stage -->
         <div class="theater-main">
           <div class="stage-header">
-            <span class="badge ${badgeClass}">
-              ${game.statusDetail || game.statusDescription}
-            </span>
-            <div style="display:flex;gap:12px;color:var(--text-secondary);font-size:0.8rem;font-family:var(--font-mono);">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span class="badge ${badgeClass}">
+                ${game.statusDetail || game.statusDescription}
+              </span>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                ${watchLinks.slice(0, 3).map(l => `
+                  <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="card-watch-link ${l.badgeClass || ''}" title="Open ${l.label}">
+                    <span>${l.icon}</span>
+                    <span>${l.shortLabel || l.label}</span>
+                  </a>
+                `).join('')}
+                <button class="stage-modal-btn card-action-btn" id="stage-open-modal-btn" style="background:var(--bg-tertiary);padding:3px 10px;border-radius:var(--radius-sm);border:1px solid var(--border-subtle);cursor:pointer;">
+                  Box Score &amp; Stats &rarr;
+                </button>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;color:var(--text-secondary);font-size:0.8rem;font-family:var(--font-mono);flex-wrap:wrap;">
               ${game.broadcast ? `<span>TV: <strong>${game.broadcast}</strong></span>` : ''}
               ${game.odds?.details ? `<span>Line: <strong>${game.odds.details}</strong></span>` : ''}
               ${game.venue ? `<span>Venue: <strong>${game.venue}</strong></span>` : ''}
@@ -333,9 +352,9 @@ export class ScoreboardRenderer {
             </div>
 
             <div class="stage-vs-score">
-              <span class="stage-score" style="color:${game.awayTeam.color}">${game.awayTeam.score}</span>
+              <span class="stage-score" style="color:${awayScoreColor}">${game.awayTeam.score}</span>
               <span class="stage-score-divider">-</span>
-              <span class="stage-score" style="color:${game.homeTeam.color}">${game.homeTeam.score}</span>
+              <span class="stage-score" style="color:${homeScoreColor}">${game.homeTeam.score}</span>
             </div>
 
             <div class="stage-team home">
@@ -380,26 +399,30 @@ export class ScoreboardRenderer {
             </div>
 
             <div class="stage-panel">
-              <div class="stage-panel-title">Win Probability</div>
+              <div class="stage-panel-title">${game.situation?.winProbability ? 'Win Probability' : 'Linescore Breakdown'}</div>
               ${game.situation?.winProbability ? `
                 <div class="wp-container" style="padding-top:10px;">
                   <div class="wp-bar" style="height:10px;">
-                    <div class="wp-fill-away" style="width:${game.situation.winProbability.awayWinPct}%;background:${game.awayTeam.color}"></div>
-                    <div class="wp-fill-home" style="width:${game.situation.winProbability.homeWinPct}%;background:${game.homeTeam.color}"></div>
+                    <div class="wp-fill-away" style="width:${game.situation.winProbability.awayWinPct}%;background:${awayScoreColor}"></div>
+                    <div class="wp-fill-home" style="width:${game.situation.winProbability.homeWinPct}%;background:${homeScoreColor}"></div>
                   </div>
                   <div class="wp-labels" style="font-size:0.85rem;margin-top:6px;">
                     <span>${game.awayTeam.abbr} ${game.situation.winProbability.awayWinPct}%</span>
                     <span>${game.homeTeam.abbr} ${game.situation.winProbability.homeWinPct}%</span>
                   </div>
                 </div>
-              ` : '<div style="color:var(--text-muted);font-size:0.8rem;">Available during active games.</div>'}
+              ` : (game.homeTeam.linescores?.length > 0 || game.state === 'post' || game.isHalftime) ? `
+                <div style="display:flex;justify-content:center;padding:12px 0;">
+                  ${this.renderLinescore(game)}
+                </div>
+              ` : '<div style="color:var(--text-muted);font-size:0.8rem;">Win probability and linescores will appear during the game.</div>'}
             </div>
           </div>
         </div>
 
-        <!-- Right Side Rail of all games -->
+        <!-- Right Side Rail of games -->
         <div class="theater-sidebar">
-          <div class="theater-sidebar-header">All Games Today</div>
+          <div class="theater-sidebar-header">Matchup Selection</div>
           ${allGames.map(g => `
             <div class="game-card state-${g.state} ${g.id === game.id ? 'is-selected' : ''}" data-game-id="${g.id}" style="${g.id === game.id ? 'border:2px solid var(--accent-blue);' : ''}">
               <div style="display:flex;justify-content:space-between;font-size:0.7rem;margin-bottom:4px;">
@@ -431,8 +454,21 @@ export class ScoreboardRenderer {
     container.querySelectorAll('.theater-sidebar .game-card').forEach(card => {
       card.addEventListener('click', () => {
         const nextGame = allGames.find(g => g.id === card.dataset.gameId);
-        if (nextGame) this.renderTheater(container, nextGame, allGames);
+        if (nextGame) {
+          if (this.onGameSelect) {
+            this.onGameSelect(nextGame);
+          } else {
+            this.renderTheater(container, nextGame, allGames);
+          }
+        }
       });
     });
+
+    const modalBtn = container.querySelector('#stage-open-modal-btn');
+    if (modalBtn) {
+      modalBtn.addEventListener('click', () => {
+        if (this.onOpenModal) this.onOpenModal(game);
+      });
+    }
   }
 }

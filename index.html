@@ -153,6 +153,34 @@
     </div>
   </dialog>
 
+  <!-- Keyboard Shortcuts Dialog -->
+  <dialog class="game-dialog" id="shortcuts-modal" style="max-width: 480px;">
+    <div class="modal-header">
+      <h2 class="modal-title">Keyboard Shortcuts</h2>
+      <button class="modal-close-btn" id="shortcuts-close-btn" title="Close (Esc)">✕</button>
+    </div>
+    <div class="modal-body" style="padding: 20px; gap: 12px;">
+      <div style="display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; align-items: center; font-size: 0.85rem;">
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">F</kbd>
+        <span>Toggle Fullscreen Mode</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">R</kbd>
+        <span>Refresh Scores Instantly</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">M</kbd>
+        <span>Mute / Unmute Audio Alerts</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">Space</kbd>
+        <span>Pause / Resume Auto-Polling</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">1</kbd>
+        <span>Grid View (All Games)</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">2</kbd>
+        <span>Theater / Focus View</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">3</kbd>
+        <span>Compact Ticker View</span>
+        <kbd class="badge badge-network" style="font-size: 0.75rem; padding: 2px 8px;">?</kbd>
+        <span>Show Keyboard Shortcuts</span>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Application Entrypoint -->
   <script type="module" src="js/app.js"></script>
 </body>
