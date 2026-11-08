@@ -50,13 +50,14 @@
     gap: 10px;
     min-width: 140px;
 
-    &-logo {
-      width: 26px;
-      height: 26px;
+    .ticker-team-logo {
+      width: 24px;
+      height: 24px;
       object-fit: contain;
+      flex-shrink: 0;
     }
 
-    &-name {
+    .ticker-team-name {
       font-weight: 800;
       font-size: 0.95rem;
       color: var(--text-bright);
@@ -77,6 +78,17 @@
     font-size: 0.78rem;
     font-family: var(--font-mono);
     color: var(--accent-gold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ticker-field-wrapper {
+    width: 220px;
+
+    .mini-field-container {
+      height: 32px;
+    }
   }
 
   .ticker-odds {

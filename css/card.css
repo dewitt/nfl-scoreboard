@@ -62,14 +62,14 @@
   border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 8px;
 
-  &-left {
+  .card-header-left {
     display: flex;
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
   }
 
-  &-right {
+  .card-header-right {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -269,7 +269,7 @@
   border: 1px solid var(--border-subtle);
   font-size: 0.78rem;
 
-  &-down-distance {
+  .situation-down-distance {
     font-weight: 800;
     font-family: var(--font-mono);
     color: var(--accent-gold);
@@ -283,7 +283,7 @@
     }
   }
 
-  &-yardline {
+  .situation-yardline {
     color: var(--text-secondary);
     font-weight: 600;
   }
@@ -344,7 +344,7 @@
   padding-top: 8px;
   margin-top: 2px;
 
-  &-right {
+  .card-footer-right {
     display: flex;
     align-items: center;
     gap: 8px;

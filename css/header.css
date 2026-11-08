@@ -18,42 +18,40 @@ header.app-header {
   min-width: 0;
 }
 
-.brand {
+.brand-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
-  color: var(--text-bright);
 
   .nfl-shield-icon {
     width: 26px;
     height: 32px;
     filter: drop-shadow(0 0 6px oklch(from var(--accent-blue) l c h / 0.4));
   }
+}
 
-  &-text {
-    display: flex;
-    flex-direction: column;
-  }
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
 
-  &-title {
-    font-size: 0.95rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-bright);
-    line-height: 1.1;
-  }
+.brand-title {
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  line-height: 1.1;
+}
 
-  &-subtitle {
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.brand-subtitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .week-select-container {
