@@ -2,8 +2,8 @@
   width: 100%;
   background: var(--field-turf);
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  border: 1px solid oklch(1 0 0 / 0.15);
+  box-shadow: inset 0 2px 6px oklch(0 0 0 / 0.4);
   position: relative;
   overflow: hidden;
   height: 48px;
@@ -33,34 +33,34 @@
   z-index: 2;
   overflow: hidden;
   padding: 2px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.45);
-}
+  box-shadow: inset 0 0 10px oklch(0 0 0 / 0.45);
 
-.endzone-left {
-  left: 0;
-  border-right: 1.5px solid rgba(255, 255, 255, 0.85);
-}
+  &.endzone-left {
+    left: 0;
+    border-right: 1.5px solid oklch(1 0 0 / 0.85);
+  }
 
-.endzone-right {
-  right: 0;
-  border-left: 1.5px solid rgba(255, 255, 255, 0.85);
-}
+  &.endzone-right {
+    right: 0;
+    border-left: 1.5px solid oklch(1 0 0 / 0.85);
+  }
 
-.endzone-logo {
-  max-width: 90%;
-  max-height: 28px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
-  pointer-events: none;
-}
+  .endzone-logo {
+    max-width: 90%;
+    max-height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px oklch(0 0 0 / 0.7));
+    pointer-events: none;
+  }
 
-.endzone-abbr {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 900;
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  letter-spacing: 0.5px;
+  .endzone-abbr {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 1px 2px oklch(0 0 0 / 0.8);
+    letter-spacing: 0.5px;
+  }
 }
 
 /* Yard Markings in SVG */
@@ -82,15 +82,15 @@
 
 .field-redzone-zone {
   fill: var(--redzone-fill);
-}
 
-.field-redzone-zone.active {
-  animation: pulse-redzone-turf 2s infinite ease-in-out;
+  &.active {
+    animation: pulse-redzone-turf 2s infinite ease-in-out;
+  }
 }
 
 @keyframes pulse-redzone-turf {
-  0%, 100% { fill: rgba(239, 68, 68, 0.2); }
-  50% { fill: rgba(239, 68, 68, 0.45); }
+  0%, 100% { fill: oklch(from var(--accent-red) l c h / 0.2); }
+  50% { fill: oklch(from var(--accent-red) l c h / 0.45); }
 }
 
 .field-scrimmage-line {
@@ -105,7 +105,7 @@
   filter: drop-shadow(0 0 4px var(--first-down-line));
 }
 
-/* Monospace Yard Numbers (HTML overlay, perfectly unskewed) */
+/* Monospace Yard Numbers */
 .field-yard-numbers {
   position: absolute;
   left: 0;
@@ -114,20 +114,20 @@
   height: 12px;
   pointer-events: none;
   z-index: 1;
+
+  .field-yard-num {
+    position: absolute;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: oklch(1 0 0 / 0.65);
+    text-shadow: 0 1px 2px oklch(0 0 0 / 0.7);
+    letter-spacing: 0.5px;
+  }
 }
 
-.field-yard-num {
-  position: absolute;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.65);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
-  letter-spacing: 0.5px;
-}
-
-/* Authentic Pro Football Marker (Fixed Aspect Ratio) */
+/* Authentic Pro Football Marker */
 .field-ball-wrapper {
   position: absolute;
   top: 50%;
@@ -138,20 +138,24 @@
   z-index: 4;
   pointer-events: none;
   transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.pro-football-svg {
-  display: block;
-  overflow: visible;
-}
+  .pro-football-svg {
+    display: block;
+    overflow: visible;
+  }
 
-.ball-drive-arrow {
-  position: absolute;
-  top: -8px;
-  font-size: 0.55rem;
-  color: #facc15;
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
-  animation: bounce-arrow 1.2s infinite ease-in-out;
+  .ball-drive-arrow {
+    position: absolute;
+    top: -8px;
+    font-size: 0.55rem;
+    color: oklch(from var(--accent-gold) 0.92 0.2 h);
+    text-shadow: 0 0 4px oklch(0 0 0 / 0.9);
+    animation: bounce-arrow 1.2s infinite ease-in-out;
+  }
+
+  &.redzone-pulse .pro-football-svg {
+    animation: ball-pulse 1.4s infinite ease-in-out;
+  }
 }
 
 @keyframes bounce-arrow {
@@ -159,13 +163,15 @@
   50% { transform: translateY(-2px); }
 }
 
-.field-ball-wrapper.redzone-pulse .pro-football-svg {
-  animation: ball-pulse 1.4s infinite ease-in-out;
-}
-
 @keyframes ball-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.6)); }
-  50% { transform: scale(1.2); filter: drop-shadow(0 0 8px rgba(239, 68, 68, 1)); }
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px oklch(from var(--accent-red) l c h / 0.6));
+  }
+  50% {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px oklch(from var(--accent-red) l c h / 1));
+  }
 }
 
 .drive-direction-indicator {
@@ -175,13 +181,13 @@
   font-size: 0.6rem;
   font-weight: 800;
   color: var(--accent-gold);
-  background: rgba(0, 0, 0, 0.7);
-  padding: 1px 5px;
+  background: oklch(0 0 0 / 0.75);
+  padding: 1px 6px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   gap: 3px;
   pointer-events: none;
   z-index: 3;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid oklch(1 0 0 / 0.12);
 }

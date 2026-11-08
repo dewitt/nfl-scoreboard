@@ -77,8 +77,9 @@ export class ScoreboardRenderer {
     }
 
     return `
-      <div class="${cardClasses}" data-game-id="${game.id}">
-        <!-- Card Top Bar -->
+      <div class="game-card-wrapper">
+        <div class="${cardClasses}" data-game-id="${game.id}" style="view-transition-name: game-${game.id};">
+          <!-- Card Top Bar -->
         <div class="card-header">
           <div class="card-header-left">
             ${statusBadge}
@@ -158,6 +159,7 @@ export class ScoreboardRenderer {
           </div>
         </div>
       </div>
+    </div>
     `;
   }
 

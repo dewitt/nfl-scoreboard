@@ -26,30 +26,44 @@ export class GameDetailsModal {
     }
 
     if (this.modalEl) {
+      // Backdrop click on native dialog
       this.modalEl.addEventListener('click', (e) => {
-        if (e.target === this.modalEl) this.close();
+        const rect = this.modalEl.getBoundingClientRect();
+        const isInside = (
+          rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+          rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+        );
+        if (!isInside) this.close();
+      });
+
+      this.modalEl.addEventListener('cancel', () => {
+        this.close();
       });
     }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isOpen()) {
-        this.close();
-      }
-    });
   }
 
   isOpen() {
-    return this.modalEl?.classList.contains('open');
+    return this.modalEl?.open || this.modalEl?.classList.contains('open');
   }
 
   close() {
+    if (this.modalEl?.open) {
+      this.modalEl.close();
+    }
     this.modalEl?.classList.remove('open');
   }
 
   async open(game) {
     this.currentGame = game;
     this.titleEl.textContent = `${game.awayTeam.displayName} @ ${game.homeTeam.displayName}`;
-    this.modalEl.classList.add('open');
+    
+    if (typeof this.modalEl.showModal === 'function') {
+      if (!this.modalEl.open) {
+        this.modalEl.showModal();
+      }
+    } else {
+      this.modalEl.classList.add('open');
+    }
 
     // Show initial skeleton
     this.bodyEl.innerHTML = `

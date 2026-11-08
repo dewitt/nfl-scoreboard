@@ -21,20 +21,29 @@ body {
   user-select: none;
 }
 
-/* Custom scrollbars */
+/* Standard CSS Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+}
+
+/* Custom WebKit Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-light);
-  border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+
+  &-track {
+    background: transparent;
+  }
+
+  &-thumb {
+    background: var(--border-light);
+    border-radius: var(--radius-full);
+
+    &:hover {
+      background: var(--text-muted);
+    }
+  }
 }
 
 button {
@@ -48,14 +57,14 @@ button {
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
 }
 
-button:focus-visible {
-  outline: 2px solid var(--accent-blue);
-  outline-offset: 2px;
-}
-
-/* Common Badges */
+/* Common Status Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -67,50 +76,50 @@ button:focus-visible {
   text-transform: uppercase;
   border-radius: var(--radius-sm);
   line-height: 1.2;
-}
 
-.badge-live {
-  background: rgba(239, 68, 68, 0.18);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
-}
+  &-live {
+    background: oklch(from var(--accent-red) l c h / 0.18);
+    color: oklch(from var(--accent-red) 0.85 0.15 h);
+    border: 1px solid oklch(from var(--accent-red) l c h / 0.35);
+    box-shadow: 0 0 10px oklch(from var(--accent-red) l c h / 0.25);
+  }
 
-.badge-redzone {
-  background: rgba(245, 158, 11, 0.22);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  animation: pulse-redzone 1.5s infinite;
-}
+  &-redzone {
+    background: oklch(from var(--accent-gold) l c h / 0.22);
+    color: oklch(from var(--accent-gold) 0.9 0.18 h);
+    border: 1px solid oklch(from var(--accent-gold) l c h / 0.45);
+    animation: pulse-redzone 1.5s infinite;
+  }
 
-.badge-halftime {
-  background: rgba(245, 158, 11, 0.16);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  letter-spacing: 0.05em;
-}
+  &-halftime {
+    background: oklch(from var(--accent-gold) l c h / 0.16);
+    color: oklch(from var(--accent-gold) 0.9 0.18 h);
+    border: 1px solid oklch(from var(--accent-gold) l c h / 0.4);
+    letter-spacing: 0.05em;
+  }
 
-.badge-final {
-  background: rgba(100, 116, 139, 0.2);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-}
+  &-final {
+    background: oklch(from var(--text-muted) l c h / 0.2);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+  }
 
-.badge-pre {
-  background: rgba(59, 130, 246, 0.15);
-  color: #93c5fd;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
+  &-pre {
+    background: oklch(from var(--accent-blue) l c h / 0.15);
+    color: oklch(from var(--accent-blue) 0.85 0.15 h);
+    border: 1px solid oklch(from var(--accent-blue) l c h / 0.3);
+  }
 
-.badge-network {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 0.65rem;
-  padding: 1px 5px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
+  &-network {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.65rem;
+    padding: 1px 5px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
 }
 
 /* Animations */
@@ -121,24 +130,22 @@ button:focus-visible {
 
 @keyframes pulse-redzone {
   0%, 100% {
-    background: rgba(245, 158, 11, 0.25);
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+    background: oklch(from var(--accent-gold) l c h / 0.25);
+    box-shadow: 0 0 12px oklch(from var(--accent-gold) l c h / 0.3);
   }
   50% {
-    background: rgba(239, 68, 68, 0.35);
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    background: oklch(from var(--accent-red) l c h / 0.35);
+    box-shadow: 0 0 20px oklch(from var(--accent-red) l c h / 0.5);
   }
 }
 
 @keyframes score-flash {
   0% {
-    background-color: rgba(245, 158, 11, 0.45);
-    transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.7);
+    background-color: oklch(from var(--accent-gold) l c h / 0.45);
+    box-shadow: 0 0 25px oklch(from var(--accent-gold) l c h / 0.7);
   }
   100% {
     background-color: transparent;
-    transform: scale(1);
     box-shadow: none;
   }
 }
@@ -156,3 +163,15 @@ button:focus-visible {
   display: inline-block;
   animation: pulse-live 1.2s infinite ease-in-out;
 }
+
+/* Modern View Transitions Motion */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+

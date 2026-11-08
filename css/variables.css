@@ -1,49 +1,59 @@
 :root {
-  --bg-primary: #080c14;
-  --bg-secondary: #0f172a;
-  --bg-card: #131c31;
-  --bg-card-hover: #18233e;
-  --bg-tertiary: #1e293b;
-  --bg-subtle: rgba(255, 255, 255, 0.03);
+  /* Surface Palette (OKLCH - Perceptually Uniform) */
+  --bg-primary: oklch(0.12 0.02 260);      /* #080c14 */
+  --bg-secondary: oklch(0.18 0.03 255);    /* #0f172a */
+  --bg-card: oklch(0.22 0.04 255);         /* #131c31 */
+  --bg-card-hover: oklch(0.26 0.05 255);   /* #18233e */
+  --bg-tertiary: oklch(0.25 0.03 255);     /* #1e293b */
+  --bg-subtle: oklch(1 0 0 / 0.04);
+  --bg-glass: oklch(0.18 0.03 255 / 0.8);
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.15);
-  --border-accent: rgba(59, 130, 246, 0.4);
+  /* Borders & Dividers */
+  --border-subtle: oklch(1 0 0 / 0.08);
+  --border-light: oklch(1 0 0 / 0.16);
+  --border-accent: oklch(0.65 0.20 250 / 0.45);
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-bright: #ffffff;
+  /* Typography */
+  --text-primary: oklch(0.98 0.01 250);
+  --text-secondary: oklch(0.72 0.03 250);
+  --text-muted: oklch(0.55 0.03 250);
+  --text-bright: oklch(1 0 0);
 
-  --accent-red: #ef4444;
-  --accent-red-glow: rgba(239, 68, 68, 0.4);
-  --accent-gold: #f59e0b;
-  --accent-gold-glow: rgba(245, 158, 11, 0.35);
-  --accent-green: #10b981;
-  --accent-green-glow: rgba(16, 185, 129, 0.35);
-  --accent-blue: #3b82f6;
-  --accent-cyan: #06b6d4;
+  /* Status Accents with Relative Color Syntax */
+  --accent-red: oklch(0.63 0.24 25);
+  --accent-red-glow: oklch(from var(--accent-red) l c h / 0.4);
+  --accent-gold: oklch(0.78 0.19 78);
+  --accent-gold-glow: oklch(from var(--accent-gold) l c h / 0.35);
+  --accent-green: oklch(0.72 0.19 155);
+  --accent-green-glow: oklch(from var(--accent-green) l c h / 0.35);
+  --accent-blue: oklch(0.65 0.20 250);
+  --accent-cyan: oklch(0.76 0.15 210);
 
-  --field-turf: #1a4d2e;
-  --field-turf-light: #205c37;
-  --field-lines: rgba(255, 255, 255, 0.6);
-  --scrimmage-line: #38bdf8;
-  --first-down-line: #facc15;
-  --redzone-fill: rgba(239, 68, 68, 0.18);
+  /* Football Field Turf & Lines */
+  --field-turf: oklch(0.35 0.09 145);
+  --field-turf-light: oklch(0.42 0.11 145);
+  --field-lines: oklch(1 0 0 / 0.65);
+  --scrimmage-line: oklch(0.75 0.14 220);
+  --first-down-line: oklch(0.85 0.19 90);
+  --redzone-fill: oklch(from var(--accent-red) l c h / 0.2);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --font-score: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  /* Typography Stacks */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  --font-score: system-ui, -apple-system, "SF Pro Display", sans-serif;
 
-  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
-  --shadow-glow: 0 0 25px -5px var(--accent-gold-glow);
+  /* Elevation & Shadows */
+  --shadow-card: 0 4px 20px -2px oklch(0 0 0 / 0.5), 0 0 0 1px oklch(1 0 0 / 0.06);
+  --shadow-glow: 0 0 25px -4px var(--accent-gold-glow);
   --shadow-live: 0 0 20px -3px var(--accent-red-glow);
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Surface Geometry */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
   --radius-full: 9999px;
 
+  /* Standard Motion */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 

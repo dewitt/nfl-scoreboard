@@ -370,12 +370,22 @@ class NFLScoreboardApp {
 
     const games = this.getFilteredGames();
 
-    if (this.activeView === 'theater') {
-      this.renderer.renderTheater(this.mainContainer, this.activeGame, this.currentData.events);
-    } else if (this.activeView === 'ticker') {
-      this.renderer.renderTicker(this.mainContainer, games);
+    const doRender = () => {
+      if (this.activeView === 'theater') {
+        this.renderer.renderTheater(this.mainContainer, this.activeGame, this.currentData.events);
+      } else if (this.activeView === 'ticker') {
+        this.renderer.renderTicker(this.mainContainer, games);
+      } else {
+        this.renderer.renderGrid(this.mainContainer, games);
+      }
+    };
+
+    if (document.startViewTransition && !this.simulator.isActive) {
+      document.startViewTransition(() => {
+        doRender();
+      });
     } else {
-      this.renderer.renderGrid(this.mainContainer, games);
+      doRender();
     }
   }
 

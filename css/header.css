@@ -24,36 +24,36 @@ header.app-header {
   gap: 10px;
   text-decoration: none;
   color: var(--text-bright);
-}
 
-.nfl-shield-icon {
-  width: 26px;
-  height: 32px;
-  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
-}
+  .nfl-shield-icon {
+    width: 26px;
+    height: 32px;
+    filter: drop-shadow(0 0 6px oklch(from var(--accent-blue) l c h / 0.4));
+  }
 
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
+  &-text {
+    display: flex;
+    flex-direction: column;
+  }
 
-.brand-title {
-  font-size: 0.95rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-bright);
-  line-height: 1.1;
-}
+  &-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    line-height: 1.1;
+  }
 
-.brand-subtitle {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.06em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  &-subtitle {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 }
 
 .week-select-container {
@@ -64,6 +64,7 @@ header.app-header {
   padding: 4px 10px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  anchor-name: --week-anchor;
 }
 
 .week-select {
@@ -74,11 +75,11 @@ header.app-header {
   font-weight: 700;
   cursor: pointer;
   outline: none;
-}
 
-.week-select option {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
 }
 
 .bye-teams {
@@ -89,10 +90,10 @@ header.app-header {
   color: var(--text-muted);
   border-left: 1px solid var(--border-subtle);
   padding-left: 10px;
-}
 
-.bye-teams:empty {
-  display: none !important;
+  &:empty {
+    display: none !important;
+  }
 }
 
 .bye-chip {
@@ -105,7 +106,7 @@ header.app-header {
   border: 1px solid var(--border-subtle);
 }
 
-/* Center Filters */
+/* Center Segmented Filters */
 .header-center {
   display: flex;
   align-items: center;
@@ -129,37 +130,37 @@ header.app-header {
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   gap: 6px;
-}
 
-.filter-btn .live-dot {
-  display: none;
-}
+  .live-dot {
+    display: none;
+  }
 
-.filter-btn.has-live .live-dot {
-  display: inline-block;
-}
+  &.has-live .live-dot {
+    display: inline-block;
+  }
 
-.filter-btn:hover {
-  color: var(--text-primary);
-  background: var(--bg-subtle);
-}
+  &:hover {
+    color: var(--text-primary);
+    background: var(--bg-subtle);
+  }
 
-.filter-btn.active {
-  background: var(--accent-blue);
-  color: #ffffff;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.35);
+  &.active {
+    background: var(--accent-blue);
+    color: #ffffff;
+    box-shadow: 0 0 10px oklch(from var(--accent-blue) l c h / 0.4);
+
+    .filter-count {
+      background: oklch(1 0 0 / 0.25);
+      color: #ffffff;
+    }
+  }
 }
 
 .filter-count {
   font-size: 0.65rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: oklch(0 0 0 / 0.35);
   padding: 1px 5px;
   border-radius: var(--radius-full);
-}
-
-.filter-btn.active .filter-count {
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
 }
 
 /* Right Controls */
@@ -182,21 +183,21 @@ header.app-header {
   width: 22px;
   height: 22px;
   transform: rotate(-90deg);
-}
 
-.countdown-circle-bg {
-  stroke: var(--bg-tertiary);
-  stroke-width: 3;
-  fill: none;
-}
+  .countdown-circle-bg {
+    stroke: var(--bg-tertiary);
+    stroke-width: 3;
+    fill: none;
+  }
 
-.countdown-circle {
-  stroke: var(--accent-blue);
-  stroke-width: 3;
-  fill: none;
-  stroke-dasharray: 56.5;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1s linear;
+  .countdown-circle {
+    stroke: var(--accent-blue);
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 56.5;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+  }
 }
 
 .ctrl-btn {
@@ -209,23 +210,23 @@ header.app-header {
   font-size: 0.75rem;
   font-weight: 600;
   gap: 6px;
-}
 
-.ctrl-btn:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-  border-color: var(--border-light);
-}
+  &:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    border-color: var(--border-light);
+  }
 
-.ctrl-btn.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: var(--border-accent);
-}
+  &.active {
+    background: oklch(from var(--accent-blue) l c h / 0.15);
+    color: oklch(from var(--accent-blue) 0.85 0.15 h);
+    border-color: var(--border-accent);
+  }
 
-.ctrl-icon-btn {
-  width: 32px;
-  padding: 0;
+  &.ctrl-icon-btn {
+    width: 32px;
+    padding: 0;
+  }
 }
 
 .scale-controls {
@@ -235,25 +236,25 @@ header.app-header {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 2px;
-}
 
-.scale-btn {
-  width: 26px;
-  height: 26px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
+  .scale-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
 
-.scale-btn:hover {
-  color: var(--text-primary);
-}
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
 
-.scale-display {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  padding: 0 4px;
+  .scale-display {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    padding: 0 4px;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -264,4 +265,41 @@ header.app-header {
 @media (max-width: 900px) {
   .week-select-container { display: none; }
   .poll-status-indicator span { display: none; }
+}
+
+@media (max-width: 640px) {
+  header.app-header {
+    height: auto;
+    min-height: 56px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+  }
+
+  .header-left {
+    gap: 8px;
+  }
+
+  .brand-title {
+    font-size: 0.8rem;
+  }
+
+  .header-center {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 2px;
+  }
+
+  .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    flex: 1;
+    justify-content: center;
+  }
 }
