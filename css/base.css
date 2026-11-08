@@ -161,6 +161,7 @@ button {
   background-color: var(--accent-red);
   border-radius: 50%;
   display: inline-block;
+  will-change: transform, opacity;
   animation: pulse-live 1.2s infinite ease-in-out;
 }
 

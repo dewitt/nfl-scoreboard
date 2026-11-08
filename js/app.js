@@ -77,7 +77,7 @@ class NFLScoreboardApp {
         this.filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.activeFilter = btn.dataset.filter;
-        this.render();
+        this.render({ animated: true });
       });
     });
 
@@ -87,7 +87,7 @@ class NFLScoreboardApp {
         this.viewButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.activeView = btn.dataset.view;
-        this.render();
+        this.render({ animated: true });
       });
     });
 
@@ -242,7 +242,7 @@ class NFLScoreboardApp {
     this.viewButtons.forEach(b => {
       b.classList.toggle('active', b.dataset.view === viewName);
     });
-    this.render();
+    this.render({ animated: true });
   }
 
   toggleDemoMode() {
@@ -365,7 +365,7 @@ class NFLScoreboardApp {
     }
   }
 
-  render() {
+  render(options = {}) {
     if (!this.mainContainer || !this.currentData) return;
 
     const games = this.getFilteredGames();
@@ -380,7 +380,7 @@ class NFLScoreboardApp {
       }
     };
 
-    if (document.startViewTransition && !this.simulator.isActive) {
+    if (options.animated && document.startViewTransition && !this.simulator.isActive) {
       document.startViewTransition(() => {
         doRender();
       });
