@@ -18,15 +18,18 @@ header.app-header {
   min-width: 0;
 }
 
-.brand-logo {
+.brand {
   display: flex;
   align-items: center;
+  gap: 10px;
   text-decoration: none;
+  color: var(--text-bright);
 
   .nfl-shield-icon {
     width: 26px;
     height: 32px;
     filter: drop-shadow(0 0 6px oklch(from var(--accent-blue) l c h / 0.4));
+    flex-shrink: 0;
   }
 }
 
