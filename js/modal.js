@@ -383,25 +383,75 @@ export class GameDetailsModal {
     const previous = drivesObj.previous || [];
     const current = drivesObj.current;
 
-    const allDrives = current ? [current, ...previous] : previous;
-    if (allDrives.length === 0) {
+    // Collect all unique drives in chronological order
+    const chronologicalDrives = [];
+    const seenIds = new Set();
+
+    for (const d of previous) {
+      const id = d.id || `${d.team?.displayName || d.team?.abbreviation}-${d.description}`;
+      if (!seenIds.has(id)) {
+        seenIds.add(id);
+        chronologicalDrives.push(d);
+      }
+    }
+
+    if (current) {
+      const curId = current.id || `${current.team?.displayName || current.team?.abbreviation}-${current.description}`;
+      const existingIdx = chronologicalDrives.findIndex(d =>
+        (d.id && current.id && d.id === current.id) ||
+        (d.team?.abbreviation === current.team?.abbreviation && d.description === current.description)
+      );
+
+      if (existingIdx !== -1) {
+        chronologicalDrives[existingIdx] = { ...chronologicalDrives[existingIdx], ...current, isCurrent: true };
+      } else {
+        chronologicalDrives.push({ ...current, isCurrent: true });
+      }
+    }
+
+    if (chronologicalDrives.length === 0) {
       return '<div style="color:var(--text-muted);text-align:center;padding:20px;">Drive data unavailable.</div>';
     }
 
+    // Reverse chronological order so the active/latest drive appears at the top
+    const totalDrives = chronologicalDrives.length;
+    const allDrives = [...chronologicalDrives].reverse();
+
     return `
-      <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="drives-timeline">
         ${allDrives.map((d, i) => {
-          const isTD = d.result === 'TD';
-          const isFG = d.result === 'FG';
-          const badgeClass = isTD ? 'badge-live' : (isFG ? 'badge-redzone' : 'badge-final');
+          const driveNum = totalDrives - i;
+          const isCurrent = d.isCurrent || (!d.result && !d.displayResult && driveNum === totalDrives);
+          const resultText = isCurrent ? 'In Progress' : (d.displayResult || d.result || 'End of Half');
+
+          const isTD = /touchdown|td/i.test(resultText);
+          const isFG = /field goal|fg/i.test(resultText);
+          const isTurnover = /interception|fumble|turnover|downs/i.test(resultText);
+
+          let badgeClass = 'badge-final';
+          if (isCurrent) badgeClass = 'badge-live';
+          else if (isTD) badgeClass = 'badge-live';
+          else if (isFG) badgeClass = 'badge-redzone';
+          else if (isTurnover) badgeClass = 'badge-redzone';
+
+          const teamLogo = d.team?.logos?.[0]?.href || d.team?.logo ||
+            (d.team?.id === game?.homeTeam.id ? game?.homeTeam.logo : game?.awayTeam.logo) || '';
+          const teamName = d.team?.displayName || (d.team?.id === game?.homeTeam.id ? game?.homeTeam.displayName : game?.awayTeam.displayName) || 'Drive';
+          const quarter = d.start?.period?.number ? `Q${d.start.period.number}` : '';
 
           return `
-            <div style="background:var(--bg-card);padding:10px 14px;border-radius:var(--radius-md);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between;">
-              <div>
-                <div style="font-weight:700;font-size:0.85rem;color:var(--text-bright);">${d.team?.displayName || 'Drive'}</div>
-                <div style="font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);">${d.description || `${d.offensivePlays || 0} plays`}</div>
+            <div class="drive-item ${isCurrent ? 'is-current' : ''}">
+              <div class="drive-main">
+                ${teamLogo ? `<img class="drive-team-logo" src="${teamLogo}" alt="" />` : ''}
+                <div>
+                  <div class="drive-header">
+                    <span class="drive-team-name">${teamName}</span>
+                    <span class="drive-quarter">${quarter ? `${quarter} &bull; ` : ''}Drive ${driveNum}</span>
+                  </div>
+                  <div class="drive-description">${d.description || `${d.offensivePlays || 0} plays`}</div>
+                </div>
               </div>
-              <span class="badge ${badgeClass}">${d.displayResult || d.result || 'Punt'}</span>
+              <span class="badge ${badgeClass}">${resultText}</span>
             </div>
           `;
         }).join('')}

@@ -336,3 +336,67 @@ dialog.game-dialog {
     height: 100%;
   }
 }
+
+/* Drives Timeline */
+.drives-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .drive-item {
+    background: var(--bg-card);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: border-color var(--transition-fast);
+
+    &.is-current {
+      border-color: oklch(from var(--accent-cyan) l c h / 0.4);
+      background: oklch(from var(--accent-cyan) 0.15 0.03 h);
+    }
+
+    .drive-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .drive-team-logo {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+
+      .drive-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+
+        .drive-team-name {
+          font-weight: 700;
+          font-size: 0.85rem;
+          color: var(--text-bright);
+        }
+
+        .drive-quarter {
+          font-size: 0.7rem;
+          color: var(--text-muted);
+          font-family: var(--font-mono);
+          font-weight: 600;
+        }
+      }
+
+      .drive-description {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        margin-top: 2px;
+      }
+    }
+  }
+}
