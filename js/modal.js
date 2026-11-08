@@ -159,29 +159,42 @@ export class GameDetailsModal {
     const awayStats = awayBox.statistics || [];
     const homeStats = homeBox.statistics || [];
 
-    const keyLabels = [
-      '1st Downs',
-      'Total Yards',
-      'Passing Yards',
-      'Rushing Yards',
-      'Turnovers',
-      'Possession',
-      '3rd down efficiency',
-      '4th down efficiency',
-      'Sacks'
+    const isPreGame = game.state === 'pre' || awayStats.some(s => s.name?.includes('PerGame'));
+
+    const categories = isPreGame ? [
+      { label: 'Points Per Game', match: ['points per game', 'totalpointspergame'] },
+      { label: 'Total Yards / Game', match: ['total yards', 'yardspergame'] },
+      { label: 'Passing Yards / Game', match: ['yards passing', 'passingyardspergame'] },
+      { label: 'Rushing Yards / Game', match: ['yards rushing', 'rushingyardspergame'] },
+      { label: 'Points Allowed / Game', match: ['points allowed per game', 'totalpointspergameallowed'] },
+      { label: 'Yards Allowed / Game', match: ['yards allowed', 'yardspergameallowed'] },
+      { label: 'Pass Yards Allowed', match: ['pass yards allowed', 'passingyardspergameallowed'] },
+      { label: 'Rush Yards Allowed', match: ['rush yards allowed', 'rushingyardspergameallowed'] }
+    ] : [
+      { label: '1st Downs', match: ['1st downs', 'firstdowns'] },
+      { label: 'Total Yards', match: ['total yards', 'totalyards'] },
+      { label: 'Passing Yards', match: ['passing yards', 'netpassingyards', 'yards passing'] },
+      { label: 'Rushing Yards', match: ['rushing yards', 'rushingyards', 'yards rushing'] },
+      { label: 'Turnovers', match: ['turnovers'] },
+      { label: 'Possession', match: ['possession', 'possessiontime'] },
+      { label: '3rd down efficiency', match: ['3rd down efficiency', 'thirddowneff'] },
+      { label: '4th down efficiency', match: ['4th down efficiency', 'fourthdowneff'] },
+      { label: 'Sacks', match: ['sacks', 'sacksyardslost'] }
     ];
+
+    const categoryTitle = isPreGame ? 'Season Averages (Per Game)' : 'Stat Category';
 
     return `
       <div class="stats-comparison">
         <div style="display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;padding-bottom:10px;border-bottom:1px solid var(--border-subtle);">
           <span style="color:${game.awayTeam.color}">${game.awayTeam.abbr}</span>
-          <span style="color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;">Stat Category</span>
+          <span style="color:var(--text-muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;">${categoryTitle}</span>
           <span style="color:${game.homeTeam.color}">${game.homeTeam.abbr}</span>
         </div>
 
-        ${keyLabels.map(label => {
-          const aStat = awayStats.find(s => s.label.toLowerCase() === label.toLowerCase());
-          const hStat = homeStats.find(s => s.label.toLowerCase() === label.toLowerCase());
+        ${categories.map(cat => {
+          const aStat = awayStats.find(s => cat.match.includes(s.label?.toLowerCase()) || cat.match.includes(s.name?.toLowerCase()));
+          const hStat = homeStats.find(s => cat.match.includes(s.label?.toLowerCase()) || cat.match.includes(s.name?.toLowerCase()));
           const aVal = aStat?.displayValue || '-';
           const hVal = hStat?.displayValue || '-';
 
@@ -199,7 +212,7 @@ export class GameDetailsModal {
             <div class="stat-row">
               <div class="stat-labels">
                 <span style="font-family:var(--font-mono)">${aVal}</span>
-                <span class="stat-title">${label}</span>
+                <span class="stat-title">${cat.label}</span>
                 <span style="font-family:var(--font-mono)">${hVal}</span>
               </div>
               <div class="stat-bar-track">
