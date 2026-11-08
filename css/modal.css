@@ -9,20 +9,24 @@ dialog.game-dialog {
   padding: 0;
   box-shadow: 0 25px 50px -12px oklch(0 0 0 / 0.8), 0 0 0 1px oklch(1 0 0 / 0.1);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 
-  /* Native entry & exit animation */
+  /* Closed state: must be display none and pointer-events none so it never intercepts clicks */
+  display: none;
   opacity: 0;
   transform: scale(0.96);
+  pointer-events: none;
+
   transition: opacity 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
               transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
               display 0.2s allow-discrete,
               overlay 0.2s allow-discrete;
 
   &[open] {
+    display: flex;
+    flex-direction: column;
     opacity: 1;
     transform: scale(1);
+    pointer-events: auto;
 
     @starting-style {
       opacity: 0;
