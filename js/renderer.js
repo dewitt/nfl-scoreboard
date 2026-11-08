@@ -219,6 +219,53 @@ export class ScoreboardRenderer {
   }
 
   /**
+   * Render full head-to-head linescore breakdown table for theater view
+   */
+  renderLinescore(game) {
+    const awayLines = game.awayTeam.linescores || [];
+    const homeLines = game.homeTeam.linescores || [];
+    const periods = Math.max(4, awayLines.length, homeLines.length);
+
+    const headers = [];
+    for (let i = 0; i < periods; i++) {
+      headers.push(i < 4 ? `${i + 1}` : (i === 4 ? 'OT' : `OT${i - 3}`));
+    }
+
+    const awayScoreColor = getAccessibleTeamColor(game.awayTeam.color, 0.75);
+    const homeScoreColor = getAccessibleTeamColor(game.homeTeam.color, 0.75);
+
+    return `
+      <table class="theater-linescore-table" style="border-collapse:collapse;font-family:var(--font-mono);font-size:0.85rem;text-align:center;width:100%;max-width:440px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border-subtle);color:var(--text-muted);">
+            <th style="text-align:left;padding:6px 10px;">Team</th>
+            ${headers.map(h => `<th style="padding:6px 8px;">${h}</th>`).join('')}
+            <th style="padding:6px 10px;font-weight:700;color:var(--text-primary);">T</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border-subtle);">
+            <td style="text-align:left;padding:6px 10px;font-weight:700;display:flex;align-items:center;gap:6px;">
+              <img src="${game.awayTeam.logo}" style="width:18px;height:18px;object-fit:contain;" alt="" />
+              <span>${game.awayTeam.abbr}</span>
+            </td>
+            ${headers.map((_, i) => `<td style="padding:6px 8px;color:var(--text-secondary);">${awayLines[i]?.value !== undefined ? awayLines[i].value : '-'}</td>`).join('')}
+            <td style="padding:6px 10px;font-weight:800;color:${awayScoreColor};">${game.awayTeam.score}</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;padding:6px 10px;font-weight:700;display:flex;align-items:center;gap:6px;">
+              <img src="${game.homeTeam.logo}" style="width:18px;height:18px;object-fit:contain;" alt="" />
+              <span>${game.homeTeam.abbr}</span>
+            </td>
+            ${headers.map((_, i) => `<td style="padding:6px 8px;color:var(--text-secondary);">${homeLines[i]?.value !== undefined ? homeLines[i].value : '-'}</td>`).join('')}
+            <td style="padding:6px 10px;font-weight:800;color:${homeScoreColor};">${game.homeTeam.score}</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+
+  /**
    * Render timeout indicator bars (3 per team)
    */
   renderTimeouts(count = 3) {

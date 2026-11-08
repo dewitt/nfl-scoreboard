@@ -98,10 +98,7 @@ class NFLScoreboardApp {
     // View switcher buttons
     this.viewButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        this.viewButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.activeView = btn.dataset.view;
-        this.render({ animated: true });
+        this.setView(btn.dataset.view);
       });
     });
 
@@ -408,7 +405,7 @@ class NFLScoreboardApp {
         const theaterGames = games.length > 0 ? games : (this.currentData.events || []);
         const targetGame = (this.activeGame && theaterGames.some(g => g.id === this.activeGame.id))
           ? this.activeGame
-          : theaterGames[0];
+          : (theaterGames.find(g => g.state === 'in') || theaterGames[0]);
         this.activeGame = targetGame;
         this.renderer.renderTheater(this.mainContainer, targetGame, theaterGames);
       } else if (this.activeView === 'ticker') {
